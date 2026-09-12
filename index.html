@@ -8,36 +8,42 @@
   :root {
     --bg: #0d1117; --panel: #161b22; --border: #30363d;
     --accent: #58a6ff; --text: #e6edf3; --text-dim: #8b949e;
-    --danger: #f85149; --green: #3fb950;
+    --danger: #f85149;
   }
   * { box-sizing: border-box; }
   body { margin:0; font-family:-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-  header { padding:14px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:var(--bg); z-index:10; }
-  .brand { display:flex; align-items:center; gap:10px; }
+  header { padding:14px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:var(--bg); z-index:10; flex-wrap:wrap; gap:10px; }
+  .brand { display:flex; align-items:center; gap:10px; cursor:pointer; }
   .mark { width:28px; height:28px; border-radius:6px; background:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:700; color:#06141f; font-size:14px; }
   header h1 { font-size:16px; margin:0; font-weight:600; }
   header span.tag { font-size:12px; color:var(--text-dim); margin-left:4px; }
   .authbox { font-size:13px; color:var(--text-dim); display:flex; align-items:center; gap:10px; }
   main { max-width:900px; margin:0 auto; padding:24px; }
   .row { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
-  input, textarea { background:var(--panel); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:10px 12px; font-size:14px; font-family:inherit; }
+  input, textarea, select { background:var(--panel); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:10px 12px; font-size:14px; font-family:inherit; }
   input { flex:1; min-width:140px; }
   textarea { width:100%; font-family:ui-monospace,monospace; resize:vertical; }
   button { background:var(--accent); color:#06141f; border:none; border-radius:8px; padding:0 16px; height:38px; font-weight:600; cursor:pointer; font-size:14px; }
   button.secondary { background:transparent; border:1px solid var(--border); color:var(--text); }
   button.danger { background:var(--danger); color:#fff; }
   button.small { height:30px; padding:0 10px; font-size:12px; }
+  .tabs { display:flex; gap:6px; margin-bottom:16px; }
+  .tabs button { background:transparent; border:1px solid var(--border); color:var(--text-dim); }
+  .tabs button.active { background:var(--accent); color:#06141f; border-color:var(--accent); }
   .card { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin-bottom:10px; }
-  .card .top { display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+  .card .top { display:flex; justify-content:space-between; align-items:center; cursor:pointer; flex-wrap:wrap; gap:8px; }
   .card .name { font-weight:600; }
   .card .desc { font-size:13px; color:var(--text-dim); margin-top:4px; }
+  .card .tags { margin-top:6px; }
+  .pill { display:inline-block; background:#1f2733; border:1px solid var(--border); color:var(--text-dim); font-size:11px; padding:2px 8px; border-radius:99px; margin-right:6px; }
   .card .meta { font-size:12px; color:var(--text-dim); display:flex; gap:12px; align-items:center; }
+  .owner-link { cursor:pointer; }
+  .owner-link:hover { color:var(--accent); }
   .back { color:var(--accent); cursor:pointer; font-size:14px; margin-bottom:16px; display:inline-block; }
-  .file-row { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border:1px solid var(--border); border-radius:8px; margin-bottom:8px; background:var(--panel); }
-  .file-row .fname { cursor:pointer; }
-  .file-row .fname:hover { color:var(--accent); }
+  .file-row { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border:1px solid var(--border); border-radius:8px; margin-bottom:8px; background:var(--panel); flex-wrap:wrap; gap:8px; }
+  .file-row .fname:hover { color:var(--accent); cursor:pointer; }
   pre { background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:14px; overflow-x:auto; font-size:13px; line-height:1.5; white-space:pre-wrap; word-break:break-word; }
-  iframe.preview { width:100%; height:340px; border:1px solid var(--border); border-radius:8px; background:#fff; margin-top:10px; }
+  iframe.preview { width:100%; height:420px; border:1px solid var(--border); border-radius:8px; background:#fff; margin-top:10px; }
   .empty { color:var(--text-dim); text-align:center; padding:40px 0; }
   h2 { font-size:20px; margin:0 0 16px; }
   h3 { font-size:15px; margin:20px 0 10px; color:var(--text-dim); font-weight:600; }
@@ -49,12 +55,13 @@
   .modal input { width:100%; margin-bottom:10px; }
   .link { color:var(--accent); cursor:pointer; font-size:13px; }
   .likebtn { cursor:pointer; }
+  .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--accent); color:#06141f; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:600; z-index:60; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="brand">
+  <div class="brand" id="homeLink">
     <div class="mark">M</div>
     <h1>Manba <span class="tag">— loyihalaringizni saqlang, ulashing va ishga tushiring</span></h1>
   </div>
@@ -63,6 +70,7 @@
 
 <main id="app"></main>
 <div id="modalRoot"></div>
+<div id="toastRoot"></div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
@@ -90,26 +98,37 @@
   const root = document.getElementById('app');
   const authbox = document.getElementById('authbox');
   const modalRoot = document.getElementById('modalRoot');
+  const toastRoot = document.getElementById('toastRoot');
   let currentUser = null;
   let allProjects = [];
   let searchTerm = '';
+  let sortMode = 'new'; // 'new' | 'top'
 
   function esc(s) {
     const d = document.createElement('div');
     d.textContent = s ?? '';
     return d.innerHTML;
   }
-  function fmtDate(ts) {
-    if (!ts || !ts.toDate) return '';
-    return ts.toDate().toLocaleDateString('uz-UZ');
-  }
   function isHtmlFile(name) { return /\.html?$/i.test(name); }
+  function toast(msg) {
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.textContent = msg;
+    toastRoot.appendChild(el);
+    setTimeout(() => el.remove(), 2200);
+  }
 
-  // ---------- AUTH UI ----------
+  document.getElementById('homeLink').onclick = () => {
+    history.pushState({}, '', location.pathname);
+    renderProjectList();
+  };
+
+  // ---------- AUTH ----------
   function renderAuthbox() {
     if (currentUser) {
-      authbox.innerHTML = `<span>${esc(currentUser.email)}</span><button class="secondary small" id="logoutBtn">Chiqish</button>`;
+      authbox.innerHTML = `<span class="link" id="myProfileLink">${esc(currentUser.email)}</span><button class="secondary small" id="logoutBtn">Chiqish</button>`;
       document.getElementById('logoutBtn').onclick = () => signOut(auth);
+      document.getElementById('myProfileLink').onclick = () => renderProfile(currentUser.uid, currentUser.email);
     } else {
       authbox.innerHTML = `<span class="link" id="loginLink">Kirish</span> / <span class="link" id="signupLink">Ro'yxatdan o'tish</span>`;
       document.getElementById('loginLink').onclick = () => showAuthModal('login');
@@ -138,11 +157,8 @@
       const pass = document.getElementById('authPass').value;
       const errEl = document.getElementById('authError');
       try {
-        if (mode === 'login') {
-          await signInWithEmailAndPassword(auth, email, pass);
-        } else {
-          await createUserWithEmailAndPassword(auth, email, pass);
-        }
+        if (mode === 'login') await signInWithEmailAndPassword(auth, email, pass);
+        else await createUserWithEmailAndPassword(auth, email, pass);
         modalRoot.innerHTML = '';
       } catch (e) {
         errEl.textContent = 'Xatolik: ' + e.message;
@@ -169,10 +185,15 @@
       <div class="row">
         <input id="newProjectName" placeholder="Loyiha nomi..." />
         <input id="newProjectDesc" placeholder="Qisqa tavsif (ixtiyoriy)..." />
+        <input id="newProjectTags" placeholder="Teglar (vergul bilan: o'yin, kalkulyator)" />
         <button id="createProjectBtn">Yaratish</button>
       </div>
       <div class="row">
-        <input id="searchBox" placeholder="🔍 Loyiha qidirish..." value="${esc(searchTerm)}" />
+        <input id="searchBox" placeholder="🔍 Loyiha yoki teg qidirish..." value="${esc(searchTerm)}" />
+      </div>
+      <div class="tabs">
+        <button id="sortNew" class="${sortMode==='new'?'active':''}">🆕 Eng yangi</button>
+        <button id="sortTop" class="${sortMode==='top'?'active':''}">🔥 Eng mashhur</button>
       </div>
       <div id="projectList"><p class="empty">Yuklanmoqda...</p></div>
     `;
@@ -181,9 +202,11 @@
       if (!currentUser) { showAuthModal('login'); return; }
       const name = document.getElementById('newProjectName').value.trim();
       const description = document.getElementById('newProjectDesc').value.trim();
+      const tagsRaw = document.getElementById('newProjectTags').value.trim();
+      const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim().toLowerCase()).filter(Boolean) : [];
       if (!name) return;
       await addDoc(collection(db, 'projects'), {
-        name, description,
+        name, description, tags,
         ownerUid: currentUser.uid, ownerEmail: currentUser.email,
         likes: [], createdAt: serverTimestamp()
       });
@@ -191,21 +214,29 @@
       renderProjectList();
     };
 
-    document.getElementById('searchBox').oninput = (e) => {
-      searchTerm = e.target.value;
-      renderProjectCards();
-    };
+    document.getElementById('searchBox').oninput = (e) => { searchTerm = e.target.value; renderProjectCards(); };
+    document.getElementById('sortNew').onclick = () => { sortMode = 'new'; renderProjectList(); };
+    document.getElementById('sortTop').onclick = () => { sortMode = 'top'; renderProjectList(); };
 
     await loadProjects();
     renderProjectCards();
   }
 
-  function renderProjectCards() {
+  function renderProjectCards(listOverride, ownerMode) {
     const listEl = document.getElementById('projectList');
     if (!listEl) return;
-    const filtered = allProjects.filter(p =>
-      p.name.toLowerCase().includes(searchTerm.toLowerCase())
+    let list = listOverride || allProjects;
+    const term = searchTerm.toLowerCase();
+    let filtered = list.filter(p =>
+      p.name.toLowerCase().includes(term) ||
+      (p.tags || []).some(t => t.includes(term))
     );
+    if (!ownerMode) {
+      filtered = filtered.slice().sort((a, b) => {
+        if (sortMode === 'top') return (b.likes?.length||0) - (a.likes?.length||0);
+        return 0; // already newest-first from query
+      });
+    }
     if (filtered.length === 0) {
       listEl.innerHTML = '<p class="empty">Hech narsa topilmadi.</p>';
       return;
@@ -221,32 +252,53 @@
           <div>
             <div class="name">${esc(p.name)}</div>
             ${p.description ? `<div class="desc">${esc(p.description)}</div>` : ''}
+            ${(p.tags && p.tags.length) ? `<div class="tags">${p.tags.map(t=>`<span class="pill">#${esc(t)}</span>`).join('')}</div>` : ''}
           </div>
           <div class="meta">
             <span class="likebtn" data-id="${p.id}">${liked ? '❤️' : '🤍'} ${likes.length}</span>
-            <span>${esc(p.ownerEmail || 'Anonim')}</span>
+            <span class="owner-link" data-uid="${p.ownerUid}" data-email="${esc(p.ownerEmail||'')}">${esc(p.ownerEmail || 'Anonim')}</span>
             <span>Ochish →</span>
           </div>
         </div>
       `;
       card.addEventListener('click', (e) => {
-        if (e.target.classList.contains('likebtn')) return;
-        renderProject(p.id);
+        if (e.target.classList.contains('likebtn') || e.target.classList.contains('owner-link')) return;
+        openProject(p.id);
       });
+      card.querySelector('.owner-link').onclick = (e) => {
+        e.stopPropagation();
+        renderProfile(p.ownerUid, p.ownerEmail);
+      };
       card.querySelector('.likebtn').onclick = async (e) => {
         e.stopPropagation();
         if (!currentUser) { showAuthModal('login'); return; }
         const ref = doc(db, 'projects', p.id);
-        if (liked) {
-          await updateDoc(ref, { likes: arrayRemove(currentUser.uid) });
-        } else {
-          await updateDoc(ref, { likes: arrayUnion(currentUser.uid) });
-        }
+        if (liked) await updateDoc(ref, { likes: arrayRemove(currentUser.uid) });
+        else await updateDoc(ref, { likes: arrayUnion(currentUser.uid) });
         await loadProjects();
-        renderProjectCards();
+        renderProjectCards(listOverride, ownerMode);
       };
       listEl.appendChild(card);
     });
+  }
+
+  function openProject(id) {
+    history.pushState({}, '', '?p=' + id);
+    renderProject(id);
+  }
+
+  // ---------- PROFILE ----------
+  async function renderProfile(uid, email) {
+    root.innerHTML = `
+      <span class="back" id="backBtn">← Loyihalar</span>
+      <h2>👤 ${esc(email || 'Foydalanuvchi')}</h2>
+      <h3>Loyihalari</h3>
+      <div id="projectList"><p class="empty">Yuklanmoqda...</p></div>
+    `;
+    document.getElementById('backBtn').onclick = () => { history.pushState({}, '', location.pathname); renderProjectList(); };
+    await loadProjects();
+    const ownList = allProjects.filter(p => p.ownerUid === uid);
+    renderProjectCards(ownList, true);
   }
 
   // ---------- PROJECT DETAIL ----------
@@ -255,15 +307,20 @@
     if (!projSnap.exists()) { renderProjectList(); return; }
     const proj = projSnap.data();
     const isOwner = currentUser && currentUser.uid === proj.ownerUid;
+    const shareUrl = location.origin + location.pathname + '?p=' + projectId;
 
     root.innerHTML = `
       <span class="back" id="backBtn">← Loyihalar</span>
       <h2>${esc(proj.name)} ${isOwner ? '<button class="danger small" id="deleteProjectBtn" style="margin-left:10px;">Loyihani o\'chirish</button>' : ''}</h2>
       ${proj.description ? `<p style="color:var(--text-dim);">${esc(proj.description)}</p>` : ''}
+      ${(proj.tags && proj.tags.length) ? `<div style="margin-bottom:14px;">${proj.tags.map(t=>`<span class="pill">#${esc(t)}</span>`).join('')}</div>` : ''}
+      <div class="row">
+        <button class="secondary small" id="shareBtn">🔗 Ulashish havolasi</button>
+      </div>
 
       <h3>Yangi fayl qo'shish</h3>
       <div class="row">
-        <input id="fileName" placeholder="masalan: index.html" />
+        <input id="fileName" placeholder="masalan: index.html, style.css, app.js" />
       </div>
       <textarea id="fileContent" rows="8" placeholder="Kod yoki matnni shu yerga yozing..."></textarea>
       <div class="row" style="margin-top:10px;">
@@ -282,12 +339,16 @@
       </div>
     `;
 
-    document.getElementById('backBtn').onclick = renderProjectList;
+    document.getElementById('backBtn').onclick = () => { history.pushState({}, '', location.pathname); renderProjectList(); };
+    document.getElementById('shareBtn').onclick = () => {
+      navigator.clipboard.writeText(shareUrl).then(() => toast('Havola nusxalandi!'));
+    };
 
     if (isOwner) {
       document.getElementById('deleteProjectBtn').onclick = async () => {
         if (!confirm("Loyihani butunlay o'chirmoqchimisiz?")) return;
         await deleteDoc(doc(db, 'projects', projectId));
+        history.pushState({}, '', location.pathname);
         renderProjectList();
       };
     }
@@ -296,47 +357,63 @@
       const name = document.getElementById('fileName').value.trim();
       const content = document.getElementById('fileContent').value;
       if (!name) return;
-      await addDoc(collection(db, 'projects', projectId, 'files'), {
-        name, content, createdAt: serverTimestamp()
-      });
+      await addDoc(collection(db, 'projects', projectId, 'files'), { name, content, createdAt: serverTimestamp() });
       renderProject(projectId);
     };
 
+    // ----- Files (with multi-file combine) -----
     const fq = query(collection(db, 'projects', projectId, 'files'), orderBy('createdAt', 'desc'));
     const fsnap = await getDocs(fq);
+    const allFiles = [];
+    fsnap.forEach(fd => allFiles.push({ id: fd.id, ...fd.data() }));
+
     const fileListEl = document.getElementById('fileList');
-    if (fsnap.empty) {
+    if (allFiles.length === 0) {
       fileListEl.innerHTML = '<p class="empty">Hali fayl yo\'q.</p>';
     } else {
       fileListEl.innerHTML = '';
-      fsnap.forEach(fd => {
-        const data = fd.data();
+      allFiles.forEach(data => {
         const row = document.createElement('div');
         row.className = 'file-row';
         row.innerHTML = `
-          <span class="fname">📄 ${esc(data.name)}</span>
+          <span class="fname" data-act="view">📄 ${esc(data.name)}</span>
           <span class="meta">
             ${isHtmlFile(data.name) ? `<button class="small" data-act="run">▶ Ishga tushirish</button>` : ''}
-            <button class="secondary small" data-act="view">Ko'rish</button>
+            <button class="secondary small" data-act="viewbtn">Ko'rish</button>
             ${isOwner ? `<button class="danger small" data-act="del">O'chirish</button>` : ''}
           </span>
         `;
-        row.querySelector('[data-act="view"]').onclick = () => {
-          document.getElementById('fileView').innerHTML =
-            `<h3>${esc(data.name)}</h3><pre>${esc(data.content)}</pre>`;
+        const showRaw = () => {
+          document.getElementById('fileView').innerHTML = `<h3>${esc(data.name)}</h3><pre>${esc(data.content)}</pre>`;
         };
+        row.querySelector('[data-act="view"]').onclick = showRaw;
+        row.querySelector('[data-act="viewbtn"]').onclick = showRaw;
         const runBtn = row.querySelector('[data-act="run"]');
         if (runBtn) {
           runBtn.onclick = () => {
+            // Combine linked CSS/JS files by name match into the HTML
+            let combined = data.content;
+            allFiles.forEach(f => {
+              if (f.name === data.name) return;
+              const escName = f.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              if (/\.css$/i.test(f.name)) {
+                const linkRe = new RegExp(`<link[^>]*href=["']${escName}["'][^>]*>`, 'gi');
+                combined = combined.replace(linkRe, `<style>\n${f.content}\n</style>`);
+              }
+              if (/\.js$/i.test(f.name)) {
+                const scriptRe = new RegExp(`<script[^>]*src=["']${escName}["'][^>]*></script>`, 'gi');
+                combined = combined.replace(scriptRe, `<script>\n${f.content}\n</script>`);
+              }
+            });
             document.getElementById('fileView').innerHTML =
-              `<h3>${esc(data.name)} — natija</h3><iframe class="preview" sandbox="allow-scripts" srcdoc="${esc(data.content)}"></iframe>`;
+              `<h3>${esc(data.name)} — natija (bog'langan CSS/JS fayllar avtomatik qo'shildi)</h3><iframe class="preview" sandbox="allow-scripts" srcdoc="${esc(combined)}"></iframe>`;
           };
         }
         const delBtn = row.querySelector('[data-act="del"]');
         if (delBtn) {
           delBtn.onclick = async () => {
             if (!confirm("Faylni o'chirmoqchimisiz?")) return;
-            await deleteDoc(doc(db, 'projects', projectId, 'files', fd.id));
+            await deleteDoc(doc(db, 'projects', projectId, 'files', data.id));
             renderProject(projectId);
           };
         }
@@ -344,6 +421,7 @@
       });
     }
 
+    // ----- Comments -----
     const cq = query(collection(db, 'projects', projectId, 'comments'), orderBy('createdAt', 'asc'));
     const csnap = await getDocs(cq);
     const commentListEl = document.getElementById('commentList');
@@ -359,22 +437,30 @@
         commentListEl.appendChild(el);
       });
     }
-
     if (currentUser) {
       document.getElementById('commentBtn').onclick = async () => {
         const text = document.getElementById('commentInput').value.trim();
         if (!text) return;
         await addDoc(collection(db, 'projects', projectId, 'comments'), {
-          text, authorEmail: currentUser.email, authorUid: currentUser.uid,
-          createdAt: serverTimestamp()
+          text, authorEmail: currentUser.email, authorUid: currentUser.uid, createdAt: serverTimestamp()
         });
         renderProject(projectId);
       };
     }
   }
 
+  // ---------- INIT / DEEP LINK ----------
   renderAuthbox();
-  renderProjectList();
+  const params = new URLSearchParams(location.search);
+  const pid = params.get('p');
+  if (pid) renderProject(pid);
+  else renderProjectList();
+
+  window.addEventListener('popstate', () => {
+    const p = new URLSearchParams(location.search).get('p');
+    if (p) renderProject(p);
+    else renderProjectList();
+  });
 </script>
 
 </body>
