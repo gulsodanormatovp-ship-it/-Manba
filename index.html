@@ -401,8 +401,8 @@
                 combined = combined.replace(linkRe, `<style>\n${f.content}\n</style>`);
               }
               if (/\.js$/i.test(f.name)) {
-                const scriptRe = new RegExp(`<script[^>]*src=["']${escName}["'][^>]*></script>`, 'gi');
-                combined = combined.replace(scriptRe, `<script>\n${f.content}\n</script>`);
+                const scriptRe = new RegExp(`<script[^>]*src=["']${escName}["'][^>]*><\/script>`, 'gi');
+                combined = combined.replace(scriptRe, `<script>\n${f.content}\n<\/script>`);
               }
             });
             document.getElementById('fileView').innerHTML =
