@@ -6,122 +6,75 @@
 <title>Manba</title>
 <style>
   :root {
-    --bg: #0d1117;
-    --panel: #161b22;
-    --border: #30363d;
-    --accent: #58a6ff;
-    --text: #e6edf3;
-    --text-dim: #8b949e;
+    --bg: #0d1117; --panel: #161b22; --border: #30363d;
+    --accent: #58a6ff; --text: #e6edf3; --text-dim: #8b949e;
+    --danger: #f85149; --green: #3fb950;
   }
   * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
-  header {
-    padding: 16px 24px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    position: sticky; top: 0;
-    background: var(--bg);
-    z-index: 10;
-  }
-  header .mark {
-    width: 28px; height: 28px;
-    border-radius: 6px;
-    background: var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; color: #06141f; font-size: 14px;
-  }
-  header h1 { font-size: 16px; margin: 0; font-weight: 600; }
-  header span.tag { font-size: 12px; color: var(--text-dim); margin-left: 4px; }
-  main { max-width: 820px; margin: 0 auto; padding: 24px; }
-  .row { display: flex; gap: 10px; margin-bottom: 20px; }
-  input, textarea {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    color: var(--text);
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 14px;
-    font-family: inherit;
-  }
-  input { flex: 1; }
-  textarea { width: 100%; font-family: ui-monospace, monospace; resize: vertical; }
-  button {
-    background: var(--accent);
-    color: #06141f;
-    border: none;
-    border-radius: 8px;
-    padding: 0 16px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  button.secondary {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text);
-  }
-  .card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .card:hover { border-color: var(--accent); }
-  .card .name { font-weight: 600; }
-  .card .meta { font-size: 12px; color: var(--text-dim); }
-  .back { color: var(--accent); cursor: pointer; font-size: 14px; margin-bottom: 16px; display: inline-block; }
-  .file-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px;
-    background: var(--panel); cursor: pointer;
-  }
-  .file-row:hover { border-color: var(--accent); }
-  pre {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px;
-    overflow-x: auto;
-    font-size: 13px;
-    line-height: 1.5;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-  .empty { color: var(--text-dim); text-align: center; padding: 40px 0; }
-  h2 { font-size: 20px; margin: 0 0 16px; }
-  h3 { font-size: 15px; margin: 20px 0 10px; color: var(--text-dim); font-weight: 600; }
+  body { margin:0; font-family:-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  header { padding:14px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:var(--bg); z-index:10; }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .mark { width:28px; height:28px; border-radius:6px; background:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:700; color:#06141f; font-size:14px; }
+  header h1 { font-size:16px; margin:0; font-weight:600; }
+  header span.tag { font-size:12px; color:var(--text-dim); margin-left:4px; }
+  .authbox { font-size:13px; color:var(--text-dim); display:flex; align-items:center; gap:10px; }
+  main { max-width:900px; margin:0 auto; padding:24px; }
+  .row { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+  input, textarea { background:var(--panel); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:10px 12px; font-size:14px; font-family:inherit; }
+  input { flex:1; min-width:140px; }
+  textarea { width:100%; font-family:ui-monospace,monospace; resize:vertical; }
+  button { background:var(--accent); color:#06141f; border:none; border-radius:8px; padding:0 16px; height:38px; font-weight:600; cursor:pointer; font-size:14px; }
+  button.secondary { background:transparent; border:1px solid var(--border); color:var(--text); }
+  button.danger { background:var(--danger); color:#fff; }
+  button.small { height:30px; padding:0 10px; font-size:12px; }
+  .card { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin-bottom:10px; }
+  .card .top { display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+  .card .name { font-weight:600; }
+  .card .desc { font-size:13px; color:var(--text-dim); margin-top:4px; }
+  .card .meta { font-size:12px; color:var(--text-dim); display:flex; gap:12px; align-items:center; }
+  .back { color:var(--accent); cursor:pointer; font-size:14px; margin-bottom:16px; display:inline-block; }
+  .file-row { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border:1px solid var(--border); border-radius:8px; margin-bottom:8px; background:var(--panel); }
+  .file-row .fname { cursor:pointer; }
+  .file-row .fname:hover { color:var(--accent); }
+  pre { background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:14px; overflow-x:auto; font-size:13px; line-height:1.5; white-space:pre-wrap; word-break:break-word; }
+  iframe.preview { width:100%; height:340px; border:1px solid var(--border); border-radius:8px; background:#fff; margin-top:10px; }
+  .empty { color:var(--text-dim); text-align:center; padding:40px 0; }
+  h2 { font-size:20px; margin:0 0 16px; }
+  h3 { font-size:15px; margin:20px 0 10px; color:var(--text-dim); font-weight:600; }
+  .comment { padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+  .comment .who { color:var(--accent); font-weight:600; margin-right:6px; }
+  .modal-bg { position:fixed; inset:0; background:rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; z-index:50; }
+  .modal { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:24px; width:320px; }
+  .modal h3 { color:var(--text); margin-top:0; }
+  .modal input { width:100%; margin-bottom:10px; }
+  .link { color:var(--accent); cursor:pointer; font-size:13px; }
+  .likebtn { cursor:pointer; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="mark">M</div>
-  <h1>Manba <span class="tag">— loyihalaringizni saqlang va ulashing</span></h1>
+  <div class="brand">
+    <div class="mark">M</div>
+    <h1>Manba <span class="tag">— loyihalaringizni saqlang, ulashing va ishga tushiring</span></h1>
+  </div>
+  <div class="authbox" id="authbox"></div>
 </header>
 
 <main id="app"></main>
+<div id="modalRoot"></div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
   import {
-    getFirestore, collection, addDoc, getDocs, doc, getDoc,
-    query, orderBy, serverTimestamp
+    getFirestore, collection, addDoc, getDocs, getDoc, doc, deleteDoc,
+    query, orderBy, serverTimestamp, updateDoc, arrayUnion, arrayRemove
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+  import {
+    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    signOut, onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
-  // ====== Firebase konfiguratsiyasi ======
   const firebaseConfig = {
     apiKey: "AIzaSyBkN0bTvtXV6OmylK2zfVCSB4EAqlX4gnE",
     authDomain: "zehinai-uz.firebaseapp.com",
@@ -132,72 +85,212 @@
   };
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-  // ========================================
+  const auth = getAuth(app);
 
   const root = document.getElementById('app');
-  let currentProject = null;
+  const authbox = document.getElementById('authbox');
+  const modalRoot = document.getElementById('modalRoot');
+  let currentUser = null;
+  let allProjects = [];
+  let searchTerm = '';
 
   function esc(s) {
     const d = document.createElement('div');
-    d.textContent = s;
+    d.textContent = s ?? '';
     return d.innerHTML;
+  }
+  function fmtDate(ts) {
+    if (!ts || !ts.toDate) return '';
+    return ts.toDate().toLocaleDateString('uz-UZ');
+  }
+  function isHtmlFile(name) { return /\.html?$/i.test(name); }
+
+  // ---------- AUTH UI ----------
+  function renderAuthbox() {
+    if (currentUser) {
+      authbox.innerHTML = `<span>${esc(currentUser.email)}</span><button class="secondary small" id="logoutBtn">Chiqish</button>`;
+      document.getElementById('logoutBtn').onclick = () => signOut(auth);
+    } else {
+      authbox.innerHTML = `<span class="link" id="loginLink">Kirish</span> / <span class="link" id="signupLink">Ro'yxatdan o'tish</span>`;
+      document.getElementById('loginLink').onclick = () => showAuthModal('login');
+      document.getElementById('signupLink').onclick = () => showAuthModal('signup');
+    }
+  }
+
+  function showAuthModal(mode) {
+    modalRoot.innerHTML = `
+      <div class="modal-bg" id="modalBg">
+        <div class="modal">
+          <h3>${mode === 'login' ? 'Kirish' : "Ro'yxatdan o'tish"}</h3>
+          <input id="authEmail" placeholder="Email" type="email" />
+          <input id="authPass" placeholder="Parol" type="password" />
+          <div id="authError" style="color:var(--danger); font-size:12px; margin-bottom:10px;"></div>
+          <div class="row">
+            <button id="authSubmit">${mode === 'login' ? 'Kirish' : 'Yaratish'}</button>
+            <button class="secondary" id="authCancel">Bekor qilish</button>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('authCancel').onclick = () => modalRoot.innerHTML = '';
+    document.getElementById('modalBg').onclick = (e) => { if (e.target.id === 'modalBg') modalRoot.innerHTML = ''; };
+    document.getElementById('authSubmit').onclick = async () => {
+      const email = document.getElementById('authEmail').value.trim();
+      const pass = document.getElementById('authPass').value;
+      const errEl = document.getElementById('authError');
+      try {
+        if (mode === 'login') {
+          await signInWithEmailAndPassword(auth, email, pass);
+        } else {
+          await createUserWithEmailAndPassword(auth, email, pass);
+        }
+        modalRoot.innerHTML = '';
+      } catch (e) {
+        errEl.textContent = 'Xatolik: ' + e.message;
+      }
+    };
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user;
+    renderAuthbox();
+  });
+
+  // ---------- PROJECT LIST ----------
+  async function loadProjects() {
+    const q = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    allProjects = [];
+    snap.forEach(d => allProjects.push({ id: d.id, ...d.data() }));
   }
 
   async function renderProjectList() {
-    currentProject = null;
     root.innerHTML = `
       <h2>Loyihalar</h2>
       <div class="row">
-        <input id="newProjectName" placeholder="Yangi loyiha nomi..." />
+        <input id="newProjectName" placeholder="Loyiha nomi..." />
+        <input id="newProjectDesc" placeholder="Qisqa tavsif (ixtiyoriy)..." />
         <button id="createProjectBtn">Yaratish</button>
+      </div>
+      <div class="row">
+        <input id="searchBox" placeholder="🔍 Loyiha qidirish..." value="${esc(searchTerm)}" />
       </div>
       <div id="projectList"><p class="empty">Yuklanmoqda...</p></div>
     `;
 
     document.getElementById('createProjectBtn').onclick = async () => {
+      if (!currentUser) { showAuthModal('login'); return; }
       const name = document.getElementById('newProjectName').value.trim();
+      const description = document.getElementById('newProjectDesc').value.trim();
       if (!name) return;
-      await addDoc(collection(db, 'projects'), { name, createdAt: serverTimestamp() });
+      await addDoc(collection(db, 'projects'), {
+        name, description,
+        ownerUid: currentUser.uid, ownerEmail: currentUser.email,
+        likes: [], createdAt: serverTimestamp()
+      });
+      await loadProjects();
       renderProjectList();
     };
 
-    const q = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
-    const snap = await getDocs(q);
+    document.getElementById('searchBox').oninput = (e) => {
+      searchTerm = e.target.value;
+      renderProjectCards();
+    };
+
+    await loadProjects();
+    renderProjectCards();
+  }
+
+  function renderProjectCards() {
     const listEl = document.getElementById('projectList');
-    if (snap.empty) {
-      listEl.innerHTML = '<p class="empty">Hali loyiha yo\'q. Birinchisini yarating!</p>';
+    if (!listEl) return;
+    const filtered = allProjects.filter(p =>
+      p.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    if (filtered.length === 0) {
+      listEl.innerHTML = '<p class="empty">Hech narsa topilmadi.</p>';
       return;
     }
     listEl.innerHTML = '';
-    snap.forEach(d => {
-      const data = d.data();
+    filtered.forEach(p => {
+      const likes = p.likes || [];
+      const liked = currentUser && likes.includes(currentUser.uid);
       const card = document.createElement('div');
       card.className = 'card';
-      card.innerHTML = `<div><div class="name">${esc(data.name)}</div></div><div class="meta">Ochish →</div>`;
-      card.onclick = () => renderProject(d.id, data.name);
+      card.innerHTML = `
+        <div class="top">
+          <div>
+            <div class="name">${esc(p.name)}</div>
+            ${p.description ? `<div class="desc">${esc(p.description)}</div>` : ''}
+          </div>
+          <div class="meta">
+            <span class="likebtn" data-id="${p.id}">${liked ? '❤️' : '🤍'} ${likes.length}</span>
+            <span>${esc(p.ownerEmail || 'Anonim')}</span>
+            <span>Ochish →</span>
+          </div>
+        </div>
+      `;
+      card.addEventListener('click', (e) => {
+        if (e.target.classList.contains('likebtn')) return;
+        renderProject(p.id);
+      });
+      card.querySelector('.likebtn').onclick = async (e) => {
+        e.stopPropagation();
+        if (!currentUser) { showAuthModal('login'); return; }
+        const ref = doc(db, 'projects', p.id);
+        if (liked) {
+          await updateDoc(ref, { likes: arrayRemove(currentUser.uid) });
+        } else {
+          await updateDoc(ref, { likes: arrayUnion(currentUser.uid) });
+        }
+        await loadProjects();
+        renderProjectCards();
+      };
       listEl.appendChild(card);
     });
   }
 
-  async function renderProject(projectId, projectName) {
-    currentProject = projectId;
+  // ---------- PROJECT DETAIL ----------
+  async function renderProject(projectId) {
+    const projSnap = await getDoc(doc(db, 'projects', projectId));
+    if (!projSnap.exists()) { renderProjectList(); return; }
+    const proj = projSnap.data();
+    const isOwner = currentUser && currentUser.uid === proj.ownerUid;
+
     root.innerHTML = `
       <span class="back" id="backBtn">← Loyihalar</span>
-      <h2>${esc(projectName)}</h2>
+      <h2>${esc(proj.name)} ${isOwner ? '<button class="danger small" id="deleteProjectBtn" style="margin-left:10px;">Loyihani o\'chirish</button>' : ''}</h2>
+      ${proj.description ? `<p style="color:var(--text-dim);">${esc(proj.description)}</p>` : ''}
+
       <h3>Yangi fayl qo'shish</h3>
       <div class="row">
-        <input id="fileName" placeholder="fayl-nomi.txt" />
+        <input id="fileName" placeholder="masalan: index.html" />
       </div>
       <textarea id="fileContent" rows="8" placeholder="Kod yoki matnni shu yerga yozing..."></textarea>
       <div class="row" style="margin-top:10px;">
         <button id="addFileBtn">Faylni saqlash</button>
       </div>
+
       <h3>Fayllar</h3>
       <div id="fileList"><p class="empty">Yuklanmoqda...</p></div>
       <div id="fileView"></div>
+
+      <h3>Izohlar</h3>
+      <div id="commentList"><p class="empty">Yuklanmoqda...</p></div>
+      <div class="row" style="margin-top:10px;">
+        <input id="commentInput" placeholder="${currentUser ? 'Izoh yozing...' : "Izoh qoldirish uchun kiring"}" ${currentUser ? '' : 'disabled'} />
+        <button id="commentBtn" ${currentUser ? '' : 'disabled'}>Yuborish</button>
+      </div>
     `;
 
     document.getElementById('backBtn').onclick = renderProjectList;
+
+    if (isOwner) {
+      document.getElementById('deleteProjectBtn').onclick = async () => {
+        if (!confirm("Loyihani butunlay o'chirmoqchimisiz?")) return;
+        await deleteDoc(doc(db, 'projects', projectId));
+        renderProjectList();
+      };
+    }
 
     document.getElementById('addFileBtn').onclick = async () => {
       const name = document.getElementById('fileName').value.trim();
@@ -206,30 +299,81 @@
       await addDoc(collection(db, 'projects', projectId, 'files'), {
         name, content, createdAt: serverTimestamp()
       });
-      renderProject(projectId, projectName);
+      renderProject(projectId);
     };
 
-    const q = query(collection(db, 'projects', projectId, 'files'), orderBy('createdAt', 'desc'));
-    const snap = await getDocs(q);
-    const listEl = document.getElementById('fileList');
-    if (snap.empty) {
-      listEl.innerHTML = '<p class="empty">Hali fayl yo\'q.</p>';
-      return;
+    const fq = query(collection(db, 'projects', projectId, 'files'), orderBy('createdAt', 'desc'));
+    const fsnap = await getDocs(fq);
+    const fileListEl = document.getElementById('fileList');
+    if (fsnap.empty) {
+      fileListEl.innerHTML = '<p class="empty">Hali fayl yo\'q.</p>';
+    } else {
+      fileListEl.innerHTML = '';
+      fsnap.forEach(fd => {
+        const data = fd.data();
+        const row = document.createElement('div');
+        row.className = 'file-row';
+        row.innerHTML = `
+          <span class="fname">📄 ${esc(data.name)}</span>
+          <span class="meta">
+            ${isHtmlFile(data.name) ? `<button class="small" data-act="run">▶ Ishga tushirish</button>` : ''}
+            <button class="secondary small" data-act="view">Ko'rish</button>
+            ${isOwner ? `<button class="danger small" data-act="del">O'chirish</button>` : ''}
+          </span>
+        `;
+        row.querySelector('[data-act="view"]').onclick = () => {
+          document.getElementById('fileView').innerHTML =
+            `<h3>${esc(data.name)}</h3><pre>${esc(data.content)}</pre>`;
+        };
+        const runBtn = row.querySelector('[data-act="run"]');
+        if (runBtn) {
+          runBtn.onclick = () => {
+            document.getElementById('fileView').innerHTML =
+              `<h3>${esc(data.name)} — natija</h3><iframe class="preview" sandbox="allow-scripts" srcdoc="${esc(data.content)}"></iframe>`;
+          };
+        }
+        const delBtn = row.querySelector('[data-act="del"]');
+        if (delBtn) {
+          delBtn.onclick = async () => {
+            if (!confirm("Faylni o'chirmoqchimisiz?")) return;
+            await deleteDoc(doc(db, 'projects', projectId, 'files', fd.id));
+            renderProject(projectId);
+          };
+        }
+        fileListEl.appendChild(row);
+      });
     }
-    listEl.innerHTML = '';
-    snap.forEach(d => {
-      const data = d.data();
-      const row = document.createElement('div');
-      row.className = 'file-row';
-      row.innerHTML = `<span>📄 ${esc(data.name)}</span><span class="meta">Ko'rish</span>`;
-      row.onclick = () => {
-        document.getElementById('fileView').innerHTML =
-          `<h3>${esc(data.name)}</h3><pre>${esc(data.content)}</pre>`;
+
+    const cq = query(collection(db, 'projects', projectId, 'comments'), orderBy('createdAt', 'asc'));
+    const csnap = await getDocs(cq);
+    const commentListEl = document.getElementById('commentList');
+    if (csnap.empty) {
+      commentListEl.innerHTML = '<p class="empty">Hali izoh yo\'q.</p>';
+    } else {
+      commentListEl.innerHTML = '';
+      csnap.forEach(cd => {
+        const c = cd.data();
+        const el = document.createElement('div');
+        el.className = 'comment';
+        el.innerHTML = `<span class="who">${esc(c.authorEmail)}</span>${esc(c.text)}`;
+        commentListEl.appendChild(el);
+      });
+    }
+
+    if (currentUser) {
+      document.getElementById('commentBtn').onclick = async () => {
+        const text = document.getElementById('commentInput').value.trim();
+        if (!text) return;
+        await addDoc(collection(db, 'projects', projectId, 'comments'), {
+          text, authorEmail: currentUser.email, authorUid: currentUser.uid,
+          createdAt: serverTimestamp()
+        });
+        renderProject(projectId);
       };
-      listEl.appendChild(row);
-    });
+    }
   }
 
+  renderAuthbox();
   renderProjectList();
 </script>
 
