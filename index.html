@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Manba</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2358a6ff'/%3E%3Ctext x='50' y='68' font-size='55' font-family='Arial,sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2358a6ff'/%3E%3Cstop offset='1' stop-color='%23238636'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Cpath d='M30 30 L20 50 L30 70 M70 30 L80 50 L70 70 M45 25 L40 75' stroke='white' stroke-width='7' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <style>
   :root {
     --bg: #0d1117; --panel: #161b22; --border: #30363d;
@@ -23,7 +26,7 @@
   .mark { width:28px; height:28px; border-radius:6px; background:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; font-size:14px; }
   header h1 { font-size:16px; margin:0; font-weight:600; }
   header span.tag { font-size:12px; color:var(--text-dim); margin-left:4px; }
-  .authbox { font-size:13px; color:var(--text-dim); display:flex; align-items:center; gap:10px; }
+  .authbox { font-size:13px; color:var(--text-dim); display:flex; align-items:center; gap:10px; position:relative; }
   .avatar { width:22px; height:22px; border-radius:50%; background:var(--accent); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:12px; }
   main { max-width:900px; margin:0 auto; padding:24px; }
   .row { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
@@ -35,7 +38,8 @@
   button.secondary { background:transparent; border:1px solid var(--border); color:var(--text); }
   button.danger { background:var(--danger); color:#fff; }
   button.small { height:30px; padding:0 10px; font-size:12px; }
-  button.iconbtn { background:transparent; border:1px solid var(--border); color:var(--text); width:38px; padding:0; }
+  button.iconbtn { background:transparent; border:1px solid var(--border); color:var(--text); width:38px; padding:0; position:relative; }
+  .badge { position:absolute; top:-4px; right:-4px; background:var(--danger); color:#fff; font-size:10px; border-radius:50%; width:16px; height:16px; display:flex; align-items:center; justify-content:center; }
   .tabs { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
   .tabs button { background:transparent; border:1px solid var(--border); color:var(--text-dim); }
   .tabs button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
@@ -49,9 +53,11 @@
   .owner-link { cursor:pointer; }
   .owner-link:hover { color:var(--accent); }
   .back { color:var(--accent); cursor:pointer; font-size:14px; margin-bottom:16px; display:inline-block; }
+  .folder-header { font-size:13px; color:var(--text-dim); margin:14px 0 6px; font-weight:600; }
   .file-row { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border:1px solid var(--border); border-radius:8px; margin-bottom:8px; background:var(--panel); flex-wrap:wrap; gap:8px; }
   .file-row .fname:hover { color:var(--accent); cursor:pointer; }
-  pre { background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:14px; overflow-x:auto; font-size:13px; line-height:1.5; white-space:pre-wrap; word-break:break-word; }
+  pre { background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:14px; overflow-x:auto; font-size:13px; line-height:1.5; }
+  pre code { white-space:pre; }
   iframe.preview { width:100%; height:420px; border:1px solid var(--border); border-radius:8px; background:#fff; margin-top:10px; }
   .empty { color:var(--text-dim); text-align:center; padding:40px 0; }
   h2 { font-size:20px; margin:0 0 16px; display:flex; align-items:center; gap:8px; }
@@ -73,6 +79,13 @@
   .issue-row .status-open { color:#3fb950; }
   .issue-row .status-closed { color:var(--danger); }
   select#langSelect { padding:6px 8px; height:32px; font-size:12px; }
+  .notif-panel { position:absolute; top:44px; right:0; width:300px; background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:10px; max-height:360px; overflow-y:auto; z-index:30; }
+  .notif-item { padding:8px; border-bottom:1px solid var(--border); font-size:12px; }
+  .stat-box { display:flex; gap:16px; margin-bottom:16px; flex-wrap:wrap; }
+  .stat-card { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:14px 20px; text-align:center; }
+  .stat-card .num { font-size:22px; font-weight:700; color:var(--accent); }
+  .stat-card .label { font-size:12px; color:var(--text-dim); }
+  .history-item { padding:8px; border:1px solid var(--border); border-radius:8px; margin-bottom:6px; font-size:12px; display:flex; justify-content:space-between; align-items:center; }
 </style>
 </head>
 <body>
@@ -89,6 +102,8 @@
       <option value="en">English</option>
     </select>
     <button class="iconbtn" id="themeToggle" title="Rejim">🌙</button>
+    <button class="iconbtn" id="savedToggle" title="Saqlanganlar">⭐</button>
+    <button class="iconbtn" id="notifToggle" title="Bildirishnomalar">🔔<span class="badge" id="notifBadge" style="display:none;">0</span></button>
     <span id="authbox"></span>
   </div>
 </header>
@@ -105,7 +120,7 @@
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
   import {
     getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-    signOut, onAuthStateChanged
+    signOut, onAuthStateChanged, sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
   const firebaseConfig = {
@@ -131,7 +146,6 @@
   let sortMode = 'new';
   let fileSearchTerm = '';
 
-  // ---------- I18N ----------
   const translations = {
     uz: { tagline: "— loyihalaringizni saqlang, ulashing va ishga tushiring", projects: "Loyihalar", create: "Yaratish", search: "🔍 Loyiha yoki teg qidirish...", newest: "🆕 Eng yangi", top: "🔥 Eng mashhur", login: "Kirish", signup: "Ro'yxatdan o'tish", logout: "Chiqish" },
     ru: { tagline: "— сохраняйте, делитесь и запускайте свои проекты", projects: "Проекты", create: "Создать", search: "🔍 Поиск проекта или тега...", newest: "🆕 Новые", top: "🔥 Популярные", login: "Войти", signup: "Регистрация", logout: "Выйти" },
@@ -155,10 +169,14 @@
     return d.innerHTML;
   }
   function isHtmlFile(name) { return /\.html?$/i.test(name); }
-  function isReadme(name) { return /^readme\.md$/i.test(name); }
+  function isReadme(name) { return /^readme\.md$/i.test(name.split('/').pop()); }
   function fmtDate(ts) {
     if (!ts || !ts.toDate) return '';
     return ts.toDate().toLocaleDateString('uz-UZ', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+  function fmtDateTime(ts) {
+    if (!ts || !ts.toDate) return '';
+    return ts.toDate().toLocaleString('uz-UZ');
   }
   function toast(msg) {
     const el = document.createElement('div');
@@ -178,13 +196,20 @@
     safe = safe.replace(/\n/g, '<br>');
     return safe;
   }
+  function guessLang(name) {
+    const ext = name.split('.').pop().toLowerCase();
+    const map = { js:'javascript', html:'xml', htm:'xml', css:'css', json:'json', py:'python', md:'markdown', txt:'plaintext' };
+    return map[ext] || 'plaintext';
+  }
 
-  // ---------- THEME ----------
+  // ---------- THEME (auto + saved) ----------
   function applyTheme(mode) {
     document.body.classList.toggle('light', mode === 'light');
     document.getElementById('themeToggle').textContent = mode === 'light' ? '☀️' : '🌙';
   }
-  applyTheme(localStorage.getItem('manba-theme') || 'dark');
+  const savedThemePref = localStorage.getItem('manba-theme');
+  const systemPrefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  applyTheme(savedThemePref || (systemPrefersLight ? 'light' : 'dark'));
   document.getElementById('themeToggle').onclick = () => {
     const next = document.body.classList.contains('light') ? 'dark' : 'light';
     localStorage.setItem('manba-theme', next);
@@ -196,7 +221,7 @@
     renderProjectList();
   };
 
-  // ---------- USER PROFILE (avatar) ----------
+  // ---------- USER PROFILE ----------
   async function loadUserProfile(uid) {
     try {
       const snap = await getDoc(doc(db, 'users', uid));
@@ -207,17 +232,76 @@
   async function ensureUserProfile(user) {
     const existing = await loadUserProfile(user.uid);
     if (!existing) {
-      await setDoc(doc(db, 'users', user.uid), { email: user.email, avatar: '👤' });
+      await setDoc(doc(db, 'users', user.uid), { email: user.email, avatar: '👤', followerCount: 0 });
       currentUserAvatar = '👤';
     } else {
       currentUserAvatar = existing.avatar || '👤';
     }
   }
 
+  // ---------- NOTIFICATIONS ----------
+  async function addNotification(targetUid, text) {
+    if (!targetUid || (currentUser && targetUid === currentUser.uid)) return;
+    await addDoc(collection(db, 'users', targetUid, 'notifications'), {
+      text, read: false, createdAt: serverTimestamp()
+    });
+  }
+  async function refreshNotifBadge() {
+    if (!currentUser) { document.getElementById('notifBadge').style.display = 'none'; return; }
+    const q = query(collection(db, 'users', currentUser.uid, 'notifications'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    const unread = snap.docs.filter(d => !d.data().read).length;
+    const badge = document.getElementById('notifBadge');
+    if (unread > 0) { badge.style.display = 'flex'; badge.textContent = unread > 9 ? '9+' : unread; }
+    else badge.style.display = 'none';
+  }
+  document.getElementById('notifToggle').onclick = async () => {
+    if (!currentUser) { showAuthModal('login'); return; }
+    const existing = document.getElementById('notifPanel');
+    if (existing) { existing.remove(); return; }
+    const q = query(collection(db, 'users', currentUser.uid, 'notifications'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    const panel = document.createElement('div');
+    panel.className = 'notif-panel';
+    panel.id = 'notifPanel';
+    if (snap.empty) {
+      panel.innerHTML = '<div class="notif-item">Hali bildirishnoma yo\'q.</div>';
+    } else {
+      panel.innerHTML = snap.docs.map(d => `<div class="notif-item">${esc(d.data().text)}<br><span style="color:var(--text-dim);">${fmtDateTime(d.data().createdAt)}</span></div>`).join('');
+      for (const d of snap.docs) {
+        if (!d.data().read) await updateDoc(doc(db, 'users', currentUser.uid, 'notifications', d.id), { read: true });
+      }
+    }
+    document.querySelector('.authbox').appendChild(panel);
+    refreshNotifBadge();
+  };
+
+  // ---------- SAVED (bookmarks) ----------
+  document.getElementById('savedToggle').onclick = () => {
+    if (!currentUser) { showAuthModal('login'); return; }
+    renderSaved();
+  };
+  async function renderSaved() {
+    root.innerHTML = `<span class="back" id="backBtn">← ${t('projects')}</span><h2>⭐ Saqlangan loyihalar</h2><div id="projectList"><p class="empty">Yuklanmoqda...</p></div>`;
+    document.getElementById('backBtn').onclick = () => { history.pushState({}, '', location.pathname); renderProjectList(); };
+    const savedSnap = await getDocs(collection(db, 'users', currentUser.uid, 'saved'));
+    const ids = savedSnap.docs.map(d => d.id);
+    await loadProjects();
+    const savedList = allProjects.filter(p => ids.includes(p.id));
+    renderProjectCards(savedList, true);
+  }
+  async function isSaved(projectId) {
+    if (!currentUser) return false;
+    const snap = await getDoc(doc(db, 'users', currentUser.uid, 'saved', projectId));
+    return snap.exists();
+  }
+
   // ---------- AUTH ----------
   function renderAuthbox() {
+    const oldPanel = document.getElementById('notifPanel');
+    if (oldPanel) oldPanel.remove();
     if (currentUser) {
-      authbox.innerHTML = `<span class="avatar" id="avatarBtn" title="Avatarni o'zgartirish" style="cursor:pointer;">${currentUserAvatar}</span><span class="link" id="myProfileLink">${esc(currentUser.email)}</span><button class="secondary small" id="logoutBtn">${t('logout')}</button>`;
+      authbox.innerHTML = `<span class="avatar" id="avatarBtn" title="Avatar" style="cursor:pointer;">${currentUserAvatar}</span><span class="link" id="myProfileLink">${esc(currentUser.email)}</span><button class="secondary small" id="logoutBtn">${t('logout')}</button>`;
       document.getElementById('logoutBtn').onclick = () => signOut(auth);
       document.getElementById('myProfileLink').onclick = () => renderProfile(currentUser.uid, currentUser.email);
       document.getElementById('avatarBtn').onclick = showAvatarModal;
@@ -226,6 +310,7 @@
       document.getElementById('loginLink').onclick = () => showAuthModal('login');
       document.getElementById('signupLink').onclick = () => showAuthModal('signup');
     }
+    refreshNotifBadge();
   }
 
   function showAvatarModal() {
@@ -245,7 +330,7 @@
     modalRoot.querySelectorAll('.avatar-opt').forEach(btn => {
       btn.onclick = async () => {
         const o = btn.getAttribute('data-o');
-        await setDoc(doc(db, 'users', currentUser.uid), { email: currentUser.email, avatar: o });
+        await setDoc(doc(db, 'users', currentUser.uid), { email: currentUser.email, avatar: o }, { merge: true });
         currentUserAvatar = o;
         modalRoot.innerHTML = '';
         renderAuthbox();
@@ -263,9 +348,10 @@
           <input id="authPass" placeholder="Parol" type="password" />
           <div id="authError" style="color:var(--danger); font-size:12px; margin-bottom:10px;"></div>
           <div class="row">
-            <button id="authSubmit">${mode === 'login' ? t('login') : t('create') || 'Yaratish'}</button>
+            <button id="authSubmit">${mode === 'login' ? t('login') : 'Yaratish'}</button>
             <button class="secondary" id="authCancel">Bekor qilish</button>
           </div>
+          ${mode === 'login' ? '<span class="link" id="forgotLink">Parolni unutdingizmi?</span>' : ''}
         </div>
       </div>`;
     document.getElementById('authCancel').onclick = () => modalRoot.innerHTML = '';
@@ -282,6 +368,20 @@
         errEl.textContent = 'Xatolik: ' + e.message;
       }
     };
+    const forgot = document.getElementById('forgotLink');
+    if (forgot) {
+      forgot.onclick = async () => {
+        const email = document.getElementById('authEmail').value.trim();
+        if (!email) { document.getElementById('authError').textContent = 'Avval email kiriting.'; return; }
+        try {
+          await sendPasswordResetEmail(auth, email);
+          toast('Parolni tiklash havolasi emailga yuborildi!');
+          modalRoot.innerHTML = '';
+        } catch (e) {
+          document.getElementById('authError').textContent = 'Xatolik: ' + e.message;
+        }
+      };
+    }
   }
 
   onAuthStateChanged(auth, async (user) => {
@@ -398,7 +498,10 @@
         if (!currentUser) { showAuthModal('login'); return; }
         const ref = doc(db, 'projects', p.id);
         if (liked) await updateDoc(ref, { likes: arrayRemove(currentUser.uid) });
-        else await updateDoc(ref, { likes: arrayUnion(currentUser.uid) });
+        else {
+          await updateDoc(ref, { likes: arrayUnion(currentUser.uid) });
+          await addNotification(p.ownerUid, `${currentUser.email} sizning "${p.name}" loyihangizni yoqtirdi ❤️`);
+        }
         await loadProjects();
         renderProjectCards(listOverride, ownerMode);
       };
@@ -413,15 +516,46 @@
 
   async function renderProfile(uid, email) {
     const profile = await loadUserProfile(uid);
+    await loadProjects();
+    const ownList = allProjects.filter(p => p.ownerUid === uid);
+    const totalLikes = ownList.reduce((sum, p) => sum + (p.likes?.length || 0), 0);
+    const totalFiles = ownList.reduce((sum, p) => sum + (p.fileCount || 0), 0);
+    const isMe = currentUser && currentUser.uid === uid;
+    let followBtnHtml = '';
+    let amFollowing = false;
+    if (currentUser && !isMe) {
+      const fSnap = await getDoc(doc(db, 'users', currentUser.uid, 'following', uid));
+      amFollowing = fSnap.exists();
+      followBtnHtml = `<button class="secondary small" id="followBtn">${amFollowing ? '✅ Kuzatilmoqda' : '➕ Kuzatish'}</button>`;
+    }
     root.innerHTML = `
       <span class="back" id="backBtn">← ${t('projects')}</span>
-      <h2><span class="avatar" style="width:32px;height:32px;font-size:16px;">${profile?.avatar || '👤'}</span> ${esc(email || 'Foydalanuvchi')}</h2>
+      <h2><span class="avatar" style="width:32px;height:32px;font-size:16px;">${profile?.avatar || '👤'}</span> ${esc(email || 'Foydalanuvchi')} ${followBtnHtml}</h2>
+      <div class="stat-box">
+        <div class="stat-card"><div class="num">${ownList.length}</div><div class="label">Loyihalar</div></div>
+        <div class="stat-card"><div class="num">${totalLikes}</div><div class="label">Yoqtirishlar</div></div>
+        <div class="stat-card"><div class="num">${totalFiles}</div><div class="label">Fayllar</div></div>
+        <div class="stat-card"><div class="num">${profile?.followerCount || 0}</div><div class="label">Kuzatuvchilar</div></div>
+      </div>
       <h3>Loyihalari</h3>
       <div id="projectList"><p class="empty">Yuklanmoqda...</p></div>
     `;
     document.getElementById('backBtn').onclick = () => { history.pushState({}, '', location.pathname); renderProjectList(); };
-    await loadProjects();
-    const ownList = allProjects.filter(p => p.ownerUid === uid);
+    const followBtn = document.getElementById('followBtn');
+    if (followBtn) {
+      followBtn.onclick = async () => {
+        const ref = doc(db, 'users', currentUser.uid, 'following', uid);
+        if (amFollowing) {
+          await deleteDoc(ref);
+          await updateDoc(doc(db, 'users', uid), { followerCount: increment(-1) });
+        } else {
+          await setDoc(ref, { since: serverTimestamp() });
+          await updateDoc(doc(db, 'users', uid), { followerCount: increment(1) });
+          await addNotification(uid, `${currentUser.email} sizni kuzata boshladi 👀`);
+        }
+        renderProfile(uid, email);
+      };
+    }
     renderProjectCards(ownList, true);
   }
 
@@ -463,6 +597,7 @@
     const proj = projSnap.data();
     const isOwner = currentUser && currentUser.uid === proj.ownerUid;
     const shareUrl = location.origin + location.pathname + '?p=' + projectId;
+    const saved = await isSaved(projectId);
 
     root.innerHTML = `
       <span class="back" id="backBtn">← ${t('projects')}</span>
@@ -472,6 +607,8 @@
       <div class="row">
         <button class="secondary small" id="shareBtn">🔗 Ulashish</button>
         <button class="secondary small" id="forkBtn">🍴 Fork</button>
+        <button class="secondary small" id="saveBtn">${saved ? '⭐ Saqlangan' : '☆ Saqlash'}</button>
+        <button class="secondary small" id="zipBtn">📦 Zip yuklab olish</button>
         ${isOwner ? `<button class="secondary small" id="archiveBtn">${proj.archived ? '📤 Arxivdan chiqarish' : '🗄 Arxivlash'}</button>` : ''}
         ${isOwner ? `<button class="danger small" id="deleteProjectBtn">O'chirish</button>` : ''}
       </div>
@@ -480,7 +617,7 @@
 
       <h3>Yangi fayl qo'shish</h3>
       <div class="row">
-        <input id="fileName" placeholder="masalan: index.html, style.css, README.md" />
+        <input id="fileName" placeholder="masalan: src/index.html, style.css, README.md" />
       </div>
       <textarea id="fileContent" rows="8" placeholder="Kod yoki matnni shu yerga yozing..."></textarea>
       <div class="row" style="margin-top:10px;">
@@ -514,6 +651,28 @@
       navigator.clipboard.writeText(shareUrl).then(() => toast('Havola nusxalandi!'));
     };
     document.getElementById('forkBtn').onclick = () => forkProject(projectId);
+    document.getElementById('saveBtn').onclick = async () => {
+      if (!currentUser) { showAuthModal('login'); return; }
+      const ref = doc(db, 'users', currentUser.uid, 'saved', projectId);
+      const nowSaved = await isSaved(projectId);
+      if (nowSaved) { await deleteDoc(ref); toast('Saqlanganlardan olib tashlandi'); }
+      else { await setDoc(ref, { savedAt: serverTimestamp() }); toast('Saqlandi!'); }
+      renderProject(projectId);
+    };
+    document.getElementById('zipBtn').onclick = async () => {
+      const fq2 = query(collection(db, 'projects', projectId, 'files'));
+      const fsnap2 = await getDocs(fq2);
+      if (fsnap2.empty) { toast('Fayl yo\'q.'); return; }
+      const zip = new JSZip();
+      fsnap2.forEach(fd => { zip.file(fd.data().name, fd.data().content); });
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = proj.name.replace(/[^a-z0-9]/gi, '_') + '.zip';
+      a.click();
+      URL.revokeObjectURL(url);
+      toast('Zip yuklandi!');
+    };
 
     if (isOwner) {
       document.getElementById('archiveBtn').onclick = async () => {
@@ -534,6 +693,7 @@
       if (!name) return;
       await addDoc(collection(db, 'projects', projectId, 'files'), { name, content, createdAt: serverTimestamp() });
       await updateDoc(doc(db, 'projects', projectId), { fileCount: increment(1) });
+      if (!isOwner) {} // n/a, owner is always the one adding here in current UI
       renderProject(projectId);
     };
 
@@ -542,13 +702,11 @@
       renderFileListOnly();
     };
 
-    // ----- Load files -----
     const fq = query(collection(db, 'projects', projectId, 'files'), orderBy('createdAt', 'desc'));
     const fsnap = await getDocs(fq);
     const allFiles = [];
     fsnap.forEach(fd => allFiles.push({ id: fd.id, ...fd.data() }));
 
-    // README render
     const readmeFile = allFiles.find(f => isReadme(f.name));
     const readmeBox = document.getElementById('readmeBox');
     if (readmeFile) {
@@ -563,96 +721,146 @@
         fileListEl.innerHTML = '<p class="empty">Hech qanday fayl topilmadi.</p>';
         return;
       }
+      // group by folder (prefix before last /)
+      const groups = {};
+      shown.forEach(f => {
+        const idx = f.name.lastIndexOf('/');
+        const folder = idx >= 0 ? f.name.substring(0, idx) : '';
+        if (!groups[folder]) groups[folder] = [];
+        groups[folder].push(f);
+      });
       fileListEl.innerHTML = '';
-      shown.forEach(data => {
-        const row = document.createElement('div');
-        row.className = 'file-row';
-        row.innerHTML = `
-          <span class="fname" data-act="view">📄 ${esc(data.name)}</span>
-          <span class="meta">
-            ${isHtmlFile(data.name) ? `<button class="small" data-act="run">▶ Ishga tushirish</button>` : ''}
-            <button class="secondary small" data-act="viewbtn">Ko'rish</button>
-            <button class="secondary small" data-act="copy">📋 Nusxalash</button>
-            ${isOwner ? `<button class="secondary small" data-act="edit">✏️ Tahrirlash</button>` : ''}
-            ${isOwner ? `<button class="danger small" data-act="del">O'chirish</button>` : ''}
-          </span>
-        `;
-        const showRaw = () => {
-          document.getElementById('fileView').innerHTML = `<h3>${esc(data.name)}</h3><pre>${esc(data.content)}</pre>`;
-        };
-        row.querySelector('[data-act="view"]').onclick = showRaw;
-        row.querySelector('[data-act="viewbtn"]').onclick = showRaw;
-        row.querySelector('[data-act="copy"]').onclick = () => {
-          navigator.clipboard.writeText(data.content).then(() => toast('Nusxalandi!'));
-        };
-
-        const runBtn = row.querySelector('[data-act="run"]');
-        if (runBtn) {
-          runBtn.onclick = () => {
-            let combined = data.content;
-            allFiles.forEach(f => {
-              if (f.name === data.name) return;
-              const escName = f.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-              if (/\.css$/i.test(f.name)) {
-                const linkRe = new RegExp('<link[^>]*href=["\']' + escName + '["\'][^>]*>', 'gi');
-                combined = combined.replace(linkRe, '<style>\n' + f.content + '\n</style>');
-              }
-              if (/\.js$/i.test(f.name)) {
-                const tagPattern = '<' + 'script[^>]*src=["\']' + escName + '["\'][^>]*>' + '<' + '/script>';
-                const scriptRe = new RegExp(tagPattern, 'gi');
-                const replacement = '<' + 'script>\n' + f.content + '\n<' + '/script>';
-                combined = combined.replace(scriptRe, replacement);
-              }
-            });
-            document.getElementById('fileView').innerHTML =
-              `<h3>${esc(data.name)} — natija</h3><iframe class="preview" sandbox="allow-scripts" srcdoc="${esc(combined)}"></iframe>`;
-          };
+      Object.keys(groups).sort().forEach(folder => {
+        if (folder) {
+          const h = document.createElement('div');
+          h.className = 'folder-header';
+          h.textContent = '📂 ' + folder;
+          fileListEl.appendChild(h);
         }
+        groups[folder].forEach(data => {
+          const displayName = folder ? data.name.substring(folder.length + 1) : data.name;
+          const row = document.createElement('div');
+          row.className = 'file-row';
+          row.innerHTML = `
+            <span class="fname" data-act="view">📄 ${esc(displayName)}</span>
+            <span class="meta">
+              ${isHtmlFile(data.name) ? `<button class="small" data-act="run">▶ Ishga tushirish</button>` : ''}
+              <button class="secondary small" data-act="viewbtn">Ko'rish</button>
+              <button class="secondary small" data-act="copy">📋 Nusxalash</button>
+              ${isOwner ? `<button class="secondary small" data-act="edit">✏️ Tahrirlash</button>` : ''}
+              ${isOwner ? `<button class="secondary small" data-act="history">📜 Tarix</button>` : ''}
+              ${isOwner ? `<button class="danger small" data-act="del">O'chirish</button>` : ''}
+            </span>
+          `;
+          const showRaw = () => {
+            const langClass = guessLang(data.name);
+            document.getElementById('fileView').innerHTML = `<h3>${esc(data.name)}</h3><pre><code class="language-${langClass}">${esc(data.content)}</code></pre>`;
+            if (window.hljs) {
+              document.querySelectorAll('#fileView pre code').forEach(el => window.hljs.highlightElement(el));
+            }
+          };
+          row.querySelector('[data-act="view"]').onclick = showRaw;
+          row.querySelector('[data-act="viewbtn"]').onclick = showRaw;
+          row.querySelector('[data-act="copy"]').onclick = () => {
+            navigator.clipboard.writeText(data.content).then(() => toast('Nusxalandi!'));
+          };
 
-        const editBtn = row.querySelector('[data-act="edit"]');
-        if (editBtn) {
-          editBtn.onclick = () => {
-            document.getElementById('fileView').innerHTML = `
-              <div class="editbox">
-                <h3>Tahrirlash: ${esc(data.name)}</h3>
-                <textarea id="editContent" rows="10">${esc(data.content)}</textarea>
-                <div class="row" style="margin-top:8px;">
-                  <button id="saveEditBtn">Saqlash</button>
-                  <button class="secondary" id="cancelEditBtn">Bekor qilish</button>
+          const runBtn = row.querySelector('[data-act="run"]');
+          if (runBtn) {
+            runBtn.onclick = () => {
+              let combined = data.content;
+              allFiles.forEach(f => {
+                if (f.name === data.name) return;
+                const escName = f.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                if (/\.css$/i.test(f.name)) {
+                  const linkRe = new RegExp('<link[^>]*href=["\']' + escName + '["\'][^>]*>', 'gi');
+                  combined = combined.replace(linkRe, '<style>\n' + f.content + '\n</style>');
+                }
+                if (/\.js$/i.test(f.name)) {
+                  const tagPattern = '<' + 'script[^>]*src=["\']' + escName + '["\'][^>]*>' + '<' + '/script>';
+                  const scriptRe = new RegExp(tagPattern, 'gi');
+                  const replacement = '<' + 'script>\n' + f.content + '\n<' + '/script>';
+                  combined = combined.replace(scriptRe, replacement);
+                }
+              });
+              document.getElementById('fileView').innerHTML =
+                `<h3>${esc(data.name)} — natija</h3><iframe class="preview" sandbox="allow-scripts" srcdoc="${esc(combined)}"></iframe>`;
+            };
+          }
+
+          const editBtn = row.querySelector('[data-act="edit"]');
+          if (editBtn) {
+            editBtn.onclick = () => {
+              document.getElementById('fileView').innerHTML = `
+                <div class="editbox">
+                  <h3>Tahrirlash: ${esc(data.name)}</h3>
+                  <textarea id="editContent" rows="10">${esc(data.content)}</textarea>
+                  <div class="row" style="margin-top:8px;">
+                    <button id="saveEditBtn">Saqlash</button>
+                    <button class="secondary" id="cancelEditBtn">Bekor qilish</button>
+                  </div>
                 </div>
-              </div>
-            `;
-            document.getElementById('cancelEditBtn').onclick = () => { document.getElementById('fileView').innerHTML = ''; };
-            document.getElementById('saveEditBtn').onclick = async () => {
-              const newContent = document.getElementById('editContent').value;
-              await updateDoc(doc(db, 'projects', projectId, 'files', data.id), { content: newContent });
-              toast('Saqlandi!');
+              `;
+              document.getElementById('cancelEditBtn').onclick = () => { document.getElementById('fileView').innerHTML = ''; };
+              document.getElementById('saveEditBtn').onclick = async () => {
+                const newContent = document.getElementById('editContent').value;
+                await addDoc(collection(db, 'projects', projectId, 'files', data.id, 'history'), {
+                  content: data.content, savedAt: serverTimestamp()
+                });
+                await updateDoc(doc(db, 'projects', projectId, 'files', data.id), { content: newContent });
+                toast('Saqlandi!');
+                renderProject(projectId);
+              };
+            };
+          }
+
+          const historyBtn = row.querySelector('[data-act="history"]');
+          if (historyBtn) {
+            historyBtn.onclick = async () => {
+              const hq = query(collection(db, 'projects', projectId, 'files', data.id, 'history'), orderBy('savedAt', 'desc'));
+              const hsnap = await getDocs(hq);
+              if (hsnap.empty) {
+                document.getElementById('fileView').innerHTML = `<h3>Tarix: ${esc(data.name)}</h3><p class="empty">Hali eski versiya yo'q.</p>`;
+                return;
+              }
+              let html = `<h3>Tarix: ${esc(data.name)}</h3>`;
+              hsnap.forEach(hd => {
+                html += `<div class="history-item"><span>${fmtDateTime(hd.data().savedAt)}</span><button class="secondary small" data-restore="${hd.id}">Tiklash</button></div>`;
+              });
+              document.getElementById('fileView').innerHTML = html;
+              hsnap.forEach(hd => {
+                const btn = document.querySelector(`[data-restore="${hd.id}"]`);
+                if (btn) btn.onclick = async () => {
+                  await updateDoc(doc(db, 'projects', projectId, 'files', data.id), { content: hd.data().content });
+                  toast('Tiklandi!');
+                  renderProject(projectId);
+                };
+              });
+            };
+          }
+
+          const delBtn = row.querySelector('[data-act="del"]');
+          if (delBtn) {
+            delBtn.onclick = async () => {
+              if (!confirm("Faylni o'chirmoqchimisiz?")) return;
+              await deleteDoc(doc(db, 'projects', projectId, 'files', data.id));
+              await updateDoc(doc(db, 'projects', projectId), { fileCount: increment(-1) });
               renderProject(projectId);
             };
-          };
-        }
-
-        const delBtn = row.querySelector('[data-act="del"]');
-        if (delBtn) {
-          delBtn.onclick = async () => {
-            if (!confirm("Faylni o'chirmoqchimisiz?")) return;
-            await deleteDoc(doc(db, 'projects', projectId, 'files', data.id));
-            await updateDoc(doc(db, 'projects', projectId), { fileCount: increment(-1) });
-            renderProject(projectId);
-          };
-        }
-        fileListEl.appendChild(row);
+          }
+          fileListEl.appendChild(row);
+        });
       });
     }
     renderFileListOnly();
 
-    // ----- Issues -----
     document.getElementById('addIssueBtn').onclick = async () => {
       const title = document.getElementById('issueTitle').value.trim();
       if (!title) return;
       await addDoc(collection(db, 'projects', projectId, 'issues'), {
         title, status: 'open', authorEmail: currentUser.email, createdAt: serverTimestamp()
       });
+      await addNotification(proj.ownerUid, `${currentUser.email} "${proj.name}" loyihasiga muammo qo'shdi: ${title}`);
       renderProject(projectId);
     };
     const iq = query(collection(db, 'projects', projectId, 'issues'), orderBy('createdAt', 'desc'));
@@ -681,7 +889,6 @@
       });
     }
 
-    // ----- Comments -----
     const cq = query(collection(db, 'projects', projectId, 'comments'), orderBy('createdAt', 'asc'));
     const csnap = await getDocs(cq);
     const commentListEl = document.getElementById('commentList');
@@ -704,6 +911,7 @@
         await addDoc(collection(db, 'projects', projectId, 'comments'), {
           text, authorEmail: currentUser.email, authorUid: currentUser.uid, createdAt: serverTimestamp()
         });
+        await addNotification(proj.ownerUid, `${currentUser.email} "${proj.name}" loyihangizga izoh qoldirdi`);
         renderProject(projectId);
       };
     }
