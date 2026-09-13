@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Manba</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2358a6ff'/%3E%3Ctext x='50' y='68' font-size='55' font-family='Arial,sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
 <style>
   :root {
     --bg: #0d1117; --panel: #161b22; --border: #30363d;
@@ -16,24 +17,26 @@
     --danger: #cf222e;
   }
   * { box-sizing: border-box; }
-  body { margin:0; font-family:-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; transition:background .15s, color .15s; }
+  body { margin:0; font-family:-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
   header { padding:14px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:var(--bg); z-index:10; flex-wrap:wrap; gap:10px; }
   .brand { display:flex; align-items:center; gap:10px; cursor:pointer; }
   .mark { width:28px; height:28px; border-radius:6px; background:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; font-size:14px; }
   header h1 { font-size:16px; margin:0; font-weight:600; }
   header span.tag { font-size:12px; color:var(--text-dim); margin-left:4px; }
   .authbox { font-size:13px; color:var(--text-dim); display:flex; align-items:center; gap:10px; }
+  .avatar { width:22px; height:22px; border-radius:50%; background:var(--accent); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:12px; }
   main { max-width:900px; margin:0 auto; padding:24px; }
   .row { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
   input, textarea, select { background:var(--panel); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:10px 12px; font-size:14px; font-family:inherit; }
-  input { flex:1; min-width:140px; }
+  input { flex:1; min-width:120px; }
+  input.icon-input { flex:0 0 60px; min-width:60px; text-align:center; }
   textarea { width:100%; font-family:ui-monospace,monospace; resize:vertical; }
   button { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:0 16px; height:38px; font-weight:600; cursor:pointer; font-size:14px; }
   button.secondary { background:transparent; border:1px solid var(--border); color:var(--text); }
   button.danger { background:var(--danger); color:#fff; }
   button.small { height:30px; padding:0 10px; font-size:12px; }
   button.iconbtn { background:transparent; border:1px solid var(--border); color:var(--text); width:38px; padding:0; }
-  .tabs { display:flex; gap:6px; margin-bottom:16px; }
+  .tabs { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
   .tabs button { background:transparent; border:1px solid var(--border); color:var(--text-dim); }
   .tabs button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
   .card { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin-bottom:10px; }
@@ -42,7 +45,7 @@
   .card .desc { font-size:13px; color:var(--text-dim); margin-top:4px; }
   .card .tags { margin-top:6px; }
   .pill { display:inline-block; background:var(--panel); border:1px solid var(--border); color:var(--text-dim); font-size:11px; padding:2px 8px; border-radius:99px; margin-right:6px; }
-  .card .meta { font-size:12px; color:var(--text-dim); display:flex; gap:12px; align-items:center; }
+  .card .meta { font-size:12px; color:var(--text-dim); display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
   .owner-link { cursor:pointer; }
   .owner-link:hover { color:var(--accent); }
   .back { color:var(--accent); cursor:pointer; font-size:14px; margin-bottom:16px; display:inline-block; }
@@ -51,7 +54,7 @@
   pre { background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:14px; overflow-x:auto; font-size:13px; line-height:1.5; white-space:pre-wrap; word-break:break-word; }
   iframe.preview { width:100%; height:420px; border:1px solid var(--border); border-radius:8px; background:#fff; margin-top:10px; }
   .empty { color:var(--text-dim); text-align:center; padding:40px 0; }
-  h2 { font-size:20px; margin:0 0 16px; }
+  h2 { font-size:20px; margin:0 0 16px; display:flex; align-items:center; gap:8px; }
   h3 { font-size:15px; margin:20px 0 10px; color:var(--text-dim); font-weight:600; }
   .comment { padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
   .comment .who { color:var(--accent); font-weight:600; margin-right:6px; }
@@ -63,6 +66,13 @@
   .likebtn { cursor:pointer; }
   .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--accent); color:#fff; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:600; z-index:60; }
   .editbox { background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px; margin-top:8px; }
+  .readme { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin-bottom:16px; line-height:1.6; }
+  .readme h4 { margin:0 0 10px; }
+  .issue-row { padding:10px 14px; border:1px solid var(--border); border-radius:8px; margin-bottom:8px; background:var(--panel); }
+  .issue-row .title { font-weight:600; }
+  .issue-row .status-open { color:#3fb950; }
+  .issue-row .status-closed { color:var(--danger); }
+  select#langSelect { padding:6px 8px; height:32px; font-size:12px; }
 </style>
 </head>
 <body>
@@ -70,10 +80,15 @@
 <header>
   <div class="brand" id="homeLink">
     <div class="mark">M</div>
-    <h1>Manba <span class="tag">— loyihalaringizni saqlang, ulashing va ishga tushiring</span></h1>
+    <h1>Manba <span class="tag" id="tagline">— loyihalaringizni saqlang, ulashing va ishga tushiring</span></h1>
   </div>
   <div class="authbox">
-    <button class="iconbtn" id="themeToggle" title="Rejimni almashtirish">🌙</button>
+    <select id="langSelect">
+      <option value="uz">O'zbekcha</option>
+      <option value="ru">Русский</option>
+      <option value="en">English</option>
+    </select>
+    <button class="iconbtn" id="themeToggle" title="Rejim">🌙</button>
     <span id="authbox"></span>
   </div>
 </header>
@@ -85,8 +100,8 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
   import {
-    getFirestore, collection, addDoc, getDocs, getDoc, doc, deleteDoc,
-    query, orderBy, serverTimestamp, updateDoc, arrayUnion, arrayRemove
+    getFirestore, collection, addDoc, getDocs, getDoc, doc, deleteDoc, setDoc,
+    query, orderBy, serverTimestamp, updateDoc, arrayUnion, arrayRemove, increment
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
   import {
     getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
@@ -110,9 +125,29 @@
   const modalRoot = document.getElementById('modalRoot');
   const toastRoot = document.getElementById('toastRoot');
   let currentUser = null;
+  let currentUserAvatar = '👤';
   let allProjects = [];
   let searchTerm = '';
   let sortMode = 'new';
+  let fileSearchTerm = '';
+
+  // ---------- I18N ----------
+  const translations = {
+    uz: { tagline: "— loyihalaringizni saqlang, ulashing va ishga tushiring", projects: "Loyihalar", create: "Yaratish", search: "🔍 Loyiha yoki teg qidirish...", newest: "🆕 Eng yangi", top: "🔥 Eng mashhur", login: "Kirish", signup: "Ro'yxatdan o'tish", logout: "Chiqish" },
+    ru: { tagline: "— сохраняйте, делитесь и запускайте свои проекты", projects: "Проекты", create: "Создать", search: "🔍 Поиск проекта или тега...", newest: "🆕 Новые", top: "🔥 Популярные", login: "Войти", signup: "Регистрация", logout: "Выйти" },
+    en: { tagline: "— save, share and run your projects", projects: "Projects", create: "Create", search: "🔍 Search project or tag...", newest: "🆕 Newest", top: "🔥 Top", login: "Login", signup: "Sign up", logout: "Logout" }
+  };
+  let lang = localStorage.getItem('manba-lang') || 'uz';
+  function t(key) { return (translations[lang] && translations[lang][key]) || translations.uz[key] || key; }
+  document.getElementById('langSelect').value = lang;
+  document.getElementById('tagline').textContent = t('tagline');
+  document.getElementById('langSelect').onchange = (e) => {
+    lang = e.target.value;
+    localStorage.setItem('manba-lang', lang);
+    document.getElementById('tagline').textContent = t('tagline');
+    renderAuthbox();
+    renderProjectList();
+  };
 
   function esc(s) {
     const d = document.createElement('div');
@@ -120,6 +155,11 @@
     return d.innerHTML;
   }
   function isHtmlFile(name) { return /\.html?$/i.test(name); }
+  function isReadme(name) { return /^readme\.md$/i.test(name); }
+  function fmtDate(ts) {
+    if (!ts || !ts.toDate) return '';
+    return ts.toDate().toLocaleDateString('uz-UZ', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
   function toast(msg) {
     const el = document.createElement('div');
     el.className = 'toast';
@@ -127,16 +167,26 @@
     toastRoot.appendChild(el);
     setTimeout(() => el.remove(), 2200);
   }
+  function simpleMarkdown(md) {
+    let safe = esc(md);
+    safe = safe.replace(/^### (.*)$/gm, '<h4 style="margin-top:14px;">$1</h4>');
+    safe = safe.replace(/^## (.*)$/gm, '<h4 style="font-size:17px;">$1</h4>');
+    safe = safe.replace(/^# (.*)$/gm, '<h4 style="font-size:19px;">$1</h4>');
+    safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    safe = safe.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    safe = safe.replace(/`(.+?)`/g, '<code>$1</code>');
+    safe = safe.replace(/\n/g, '<br>');
+    return safe;
+  }
 
+  // ---------- THEME ----------
   function applyTheme(mode) {
     document.body.classList.toggle('light', mode === 'light');
     document.getElementById('themeToggle').textContent = mode === 'light' ? '☀️' : '🌙';
   }
-  const savedTheme = localStorage.getItem('manba-theme') || 'dark';
-  applyTheme(savedTheme);
+  applyTheme(localStorage.getItem('manba-theme') || 'dark');
   document.getElementById('themeToggle').onclick = () => {
-    const isLight = document.body.classList.contains('light');
-    const next = isLight ? 'dark' : 'light';
+    const next = document.body.classList.contains('light') ? 'dark' : 'light';
     localStorage.setItem('manba-theme', next);
     applyTheme(next);
   };
@@ -146,28 +196,74 @@
     renderProjectList();
   };
 
+  // ---------- USER PROFILE (avatar) ----------
+  async function loadUserProfile(uid) {
+    try {
+      const snap = await getDoc(doc(db, 'users', uid));
+      if (snap.exists()) return snap.data();
+    } catch (e) {}
+    return null;
+  }
+  async function ensureUserProfile(user) {
+    const existing = await loadUserProfile(user.uid);
+    if (!existing) {
+      await setDoc(doc(db, 'users', user.uid), { email: user.email, avatar: '👤' });
+      currentUserAvatar = '👤';
+    } else {
+      currentUserAvatar = existing.avatar || '👤';
+    }
+  }
+
+  // ---------- AUTH ----------
   function renderAuthbox() {
     if (currentUser) {
-      authbox.innerHTML = `<span class="link" id="myProfileLink">${esc(currentUser.email)}</span><button class="secondary small" id="logoutBtn">Chiqish</button>`;
+      authbox.innerHTML = `<span class="avatar" id="avatarBtn" title="Avatarni o'zgartirish" style="cursor:pointer;">${currentUserAvatar}</span><span class="link" id="myProfileLink">${esc(currentUser.email)}</span><button class="secondary small" id="logoutBtn">${t('logout')}</button>`;
       document.getElementById('logoutBtn').onclick = () => signOut(auth);
       document.getElementById('myProfileLink').onclick = () => renderProfile(currentUser.uid, currentUser.email);
+      document.getElementById('avatarBtn').onclick = showAvatarModal;
     } else {
-      authbox.innerHTML = `<span class="link" id="loginLink">Kirish</span> / <span class="link" id="signupLink">Ro'yxatdan o'tish</span>`;
+      authbox.innerHTML = `<span class="link" id="loginLink">${t('login')}</span> / <span class="link" id="signupLink">${t('signup')}</span>`;
       document.getElementById('loginLink').onclick = () => showAuthModal('login');
       document.getElementById('signupLink').onclick = () => showAuthModal('signup');
     }
+  }
+
+  function showAvatarModal() {
+    const options = ['👤','😀','🚀','🔥','🐱','🦊','🌟','🎮','💻','🎨','🐉','🦁'];
+    modalRoot.innerHTML = `
+      <div class="modal-bg" id="modalBg">
+        <div class="modal">
+          <h3>Avatar tanlang</h3>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+            ${options.map(o => `<button class="secondary avatar-opt" data-o="${o}" style="font-size:20px; width:44px; height:44px; padding:0;">${o}</button>`).join('')}
+          </div>
+          <button class="secondary" id="avatarCancel">Yopish</button>
+        </div>
+      </div>`;
+    document.getElementById('avatarCancel').onclick = () => modalRoot.innerHTML = '';
+    document.getElementById('modalBg').onclick = (e) => { if (e.target.id === 'modalBg') modalRoot.innerHTML = ''; };
+    modalRoot.querySelectorAll('.avatar-opt').forEach(btn => {
+      btn.onclick = async () => {
+        const o = btn.getAttribute('data-o');
+        await setDoc(doc(db, 'users', currentUser.uid), { email: currentUser.email, avatar: o });
+        currentUserAvatar = o;
+        modalRoot.innerHTML = '';
+        renderAuthbox();
+        toast('Avatar yangilandi!');
+      };
+    });
   }
 
   function showAuthModal(mode) {
     modalRoot.innerHTML = `
       <div class="modal-bg" id="modalBg">
         <div class="modal">
-          <h3>${mode === 'login' ? 'Kirish' : "Ro'yxatdan o'tish"}</h3>
+          <h3>${mode === 'login' ? t('login') : t('signup')}</h3>
           <input id="authEmail" placeholder="Email" type="email" />
           <input id="authPass" placeholder="Parol" type="password" />
           <div id="authError" style="color:var(--danger); font-size:12px; margin-bottom:10px;"></div>
           <div class="row">
-            <button id="authSubmit">${mode === 'login' ? 'Kirish' : 'Yaratish'}</button>
+            <button id="authSubmit">${mode === 'login' ? t('login') : t('create') || 'Yaratish'}</button>
             <button class="secondary" id="authCancel">Bekor qilish</button>
           </div>
         </div>
@@ -188,11 +284,13 @@
     };
   }
 
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
     currentUser = user;
+    if (user) await ensureUserProfile(user);
     renderAuthbox();
   });
 
+  // ---------- PROJECT LIST ----------
   async function loadProjects() {
     const q = query(collection(db, 'projects'), orderBy('createdAt', 'desc'));
     const snap = await getDocs(q);
@@ -202,34 +300,36 @@
 
   async function renderProjectList() {
     root.innerHTML = `
-      <h2>Loyihalar</h2>
+      <h2>${t('projects')}</h2>
       <div class="row">
+        <input id="newProjectIcon" class="icon-input" placeholder="📁" maxlength="2" />
         <input id="newProjectName" placeholder="Loyiha nomi..." />
         <input id="newProjectDesc" placeholder="Qisqa tavsif (ixtiyoriy)..." />
-        <input id="newProjectTags" placeholder="Teglar (vergul bilan: o'yin, kalkulyator)" />
-        <button id="createProjectBtn">Yaratish</button>
+        <input id="newProjectTags" placeholder="Teglar (vergul bilan)" />
+        <button id="createProjectBtn">${t('create')}</button>
       </div>
       <div class="row">
-        <input id="searchBox" placeholder="🔍 Loyiha yoki teg qidirish..." value="${esc(searchTerm)}" />
+        <input id="searchBox" placeholder="${t('search')}" value="${esc(searchTerm)}" />
       </div>
       <div class="tabs">
-        <button id="sortNew" class="${sortMode==='new'?'active':''}">🆕 Eng yangi</button>
-        <button id="sortTop" class="${sortMode==='top'?'active':''}">🔥 Eng mashhur</button>
+        <button id="sortNew" class="${sortMode==='new'?'active':''}">${t('newest')}</button>
+        <button id="sortTop" class="${sortMode==='top'?'active':''}">${t('top')}</button>
       </div>
       <div id="projectList"><p class="empty">Yuklanmoqda...</p></div>
     `;
 
     document.getElementById('createProjectBtn').onclick = async () => {
       if (!currentUser) { showAuthModal('login'); return; }
+      const icon = document.getElementById('newProjectIcon').value.trim() || '📁';
       const name = document.getElementById('newProjectName').value.trim();
       const description = document.getElementById('newProjectDesc').value.trim();
       const tagsRaw = document.getElementById('newProjectTags').value.trim();
-      const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim().toLowerCase()).filter(Boolean) : [];
+      const tags = tagsRaw ? tagsRaw.split(',').map(x => x.trim().toLowerCase()).filter(Boolean) : [];
       if (!name) return;
       await addDoc(collection(db, 'projects'), {
-        name, description, tags,
+        name, description, tags, icon,
         ownerUid: currentUser.uid, ownerEmail: currentUser.email,
-        likes: [], createdAt: serverTimestamp()
+        likes: [], fileCount: 0, archived: false, createdAt: serverTimestamp()
       });
       await loadProjects();
       renderProjectList();
@@ -247,10 +347,11 @@
     const listEl = document.getElementById('projectList');
     if (!listEl) return;
     let list = listOverride || allProjects;
+    if (!ownerMode) list = list.filter(p => !p.archived);
     const term = searchTerm.toLowerCase();
     let filtered = list.filter(p =>
       p.name.toLowerCase().includes(term) ||
-      (p.tags || []).some(t => t.includes(term))
+      (p.tags || []).some(x => x.includes(term))
     );
     if (!ownerMode) {
       filtered = filtered.slice().sort((a, b) => {
@@ -271,11 +372,13 @@
       card.innerHTML = `
         <div class="top">
           <div>
-            <div class="name">${esc(p.name)}${p.forkedFrom ? ' <span class="pill">🍴 fork</span>' : ''}</div>
+            <div class="name">${p.icon || '📁'} ${esc(p.name)}${p.forkedFrom ? ' <span class="pill">🍴 fork</span>' : ''}${p.archived ? ' <span class="pill">🗄 arxivlangan</span>' : ''}</div>
             ${p.description ? `<div class="desc">${esc(p.description)}</div>` : ''}
-            ${(p.tags && p.tags.length) ? `<div class="tags">${p.tags.map(t=>`<span class="pill">#${esc(t)}</span>`).join('')}</div>` : ''}
+            ${(p.tags && p.tags.length) ? `<div class="tags">${p.tags.map(x=>`<span class="pill">#${esc(x)}</span>`).join('')}</div>` : ''}
           </div>
           <div class="meta">
+            <span>${p.fileCount || 0} fayl</span>
+            <span>${fmtDate(p.createdAt)}</span>
             <span class="likebtn" data-id="${p.id}">${liked ? '❤️' : '🤍'} ${likes.length}</span>
             <span class="owner-link" data-uid="${p.ownerUid}" data-email="${esc(p.ownerEmail||'')}">${esc(p.ownerEmail || 'Anonim')}</span>
             <span>Ochish →</span>
@@ -309,9 +412,10 @@
   }
 
   async function renderProfile(uid, email) {
+    const profile = await loadUserProfile(uid);
     root.innerHTML = `
-      <span class="back" id="backBtn">← Loyihalar</span>
-      <h2>👤 ${esc(email || 'Foydalanuvchi')}</h2>
+      <span class="back" id="backBtn">← ${t('projects')}</span>
+      <h2><span class="avatar" style="width:32px;height:32px;font-size:16px;">${profile?.avatar || '👤'}</span> ${esc(email || 'Foydalanuvchi')}</h2>
       <h3>Loyihalari</h3>
       <div id="projectList"><p class="empty">Yuklanmoqda...</p></div>
     `;
@@ -330,24 +434,29 @@
       name: proj.name + ' (fork)',
       description: proj.description || '',
       tags: proj.tags || [],
+      icon: proj.icon || '📁',
       ownerUid: currentUser.uid,
       ownerEmail: currentUser.email,
-      likes: [],
+      likes: [], fileCount: 0, archived: false,
       forkedFrom: projectId,
       createdAt: serverTimestamp()
     });
     const fq = query(collection(db, 'projects', projectId, 'files'));
     const fsnap = await getDocs(fq);
+    let count = 0;
     for (const fd of fsnap.docs) {
       const data = fd.data();
       await addDoc(collection(db, 'projects', newRef.id, 'files'), {
         name: data.name, content: data.content, createdAt: serverTimestamp()
       });
+      count++;
     }
+    await updateDoc(doc(db, 'projects', newRef.id), { fileCount: count });
     toast("Nusxalandi! Endi bu sizning loyihangiz.");
     openProject(newRef.id);
   }
 
+  // ---------- PROJECT DETAIL ----------
   async function renderProject(projectId) {
     const projSnap = await getDoc(doc(db, 'projects', projectId));
     if (!projSnap.exists()) { renderProjectList(); return; }
@@ -356,18 +465,22 @@
     const shareUrl = location.origin + location.pathname + '?p=' + projectId;
 
     root.innerHTML = `
-      <span class="back" id="backBtn">← Loyihalar</span>
-      <h2>${esc(proj.name)} ${isOwner ? '<button class="danger small" id="deleteProjectBtn" style="margin-left:10px;">Loyihani o\'chirish</button>' : ''}</h2>
+      <span class="back" id="backBtn">← ${t('projects')}</span>
+      <h2>${proj.icon || '📁'} ${esc(proj.name)} ${proj.archived ? '<span class="pill">🗄 arxivlangan</span>' : ''}</h2>
       ${proj.description ? `<p style="color:var(--text-dim);">${esc(proj.description)}</p>` : ''}
-      ${(proj.tags && proj.tags.length) ? `<div style="margin-bottom:14px;">${proj.tags.map(t=>`<span class="pill">#${esc(t)}</span>`).join('')}</div>` : ''}
+      ${(proj.tags && proj.tags.length) ? `<div style="margin-bottom:14px;">${proj.tags.map(x=>`<span class="pill">#${esc(x)}</span>`).join('')}</div>` : ''}
       <div class="row">
-        <button class="secondary small" id="shareBtn">🔗 Ulashish havolasi</button>
-        <button class="secondary small" id="forkBtn">🍴 Nusxalash (Fork)</button>
+        <button class="secondary small" id="shareBtn">🔗 Ulashish</button>
+        <button class="secondary small" id="forkBtn">🍴 Fork</button>
+        ${isOwner ? `<button class="secondary small" id="archiveBtn">${proj.archived ? '📤 Arxivdan chiqarish' : '🗄 Arxivlash'}</button>` : ''}
+        ${isOwner ? `<button class="danger small" id="deleteProjectBtn">O'chirish</button>` : ''}
       </div>
+
+      <div id="readmeBox"></div>
 
       <h3>Yangi fayl qo'shish</h3>
       <div class="row">
-        <input id="fileName" placeholder="masalan: index.html, style.css, app.js" />
+        <input id="fileName" placeholder="masalan: index.html, style.css, README.md" />
       </div>
       <textarea id="fileContent" rows="8" placeholder="Kod yoki matnni shu yerga yozing..."></textarea>
       <div class="row" style="margin-top:10px;">
@@ -375,8 +488,18 @@
       </div>
 
       <h3>Fayllar</h3>
+      <div class="row">
+        <input id="fileSearchBox" placeholder="Fayl nomi bo'yicha qidirish..." value="${esc(fileSearchTerm)}" />
+      </div>
       <div id="fileList"><p class="empty">Yuklanmoqda...</p></div>
       <div id="fileView"></div>
+
+      <h3>🐞 Muammolar (Issues)</h3>
+      <div class="row">
+        <input id="issueTitle" placeholder="Muammo sarlavhasi..." ${currentUser ? '' : 'disabled'} />
+        <button id="addIssueBtn" ${currentUser ? '' : 'disabled'}>Qo'shish</button>
+      </div>
+      <div id="issueList"><p class="empty">Yuklanmoqda...</p></div>
 
       <h3>Izohlar</h3>
       <div id="commentList"><p class="empty">Yuklanmoqda...</p></div>
@@ -393,6 +516,10 @@
     document.getElementById('forkBtn').onclick = () => forkProject(projectId);
 
     if (isOwner) {
+      document.getElementById('archiveBtn').onclick = async () => {
+        await updateDoc(doc(db, 'projects', projectId), { archived: !proj.archived });
+        renderProject(projectId);
+      };
       document.getElementById('deleteProjectBtn').onclick = async () => {
         if (!confirm("Loyihani butunlay o'chirmoqchimisiz?")) return;
         await deleteDoc(doc(db, 'projects', projectId));
@@ -406,20 +533,38 @@
       const content = document.getElementById('fileContent').value;
       if (!name) return;
       await addDoc(collection(db, 'projects', projectId, 'files'), { name, content, createdAt: serverTimestamp() });
+      await updateDoc(doc(db, 'projects', projectId), { fileCount: increment(1) });
       renderProject(projectId);
     };
 
+    document.getElementById('fileSearchBox').oninput = (e) => {
+      fileSearchTerm = e.target.value;
+      renderFileListOnly();
+    };
+
+    // ----- Load files -----
     const fq = query(collection(db, 'projects', projectId, 'files'), orderBy('createdAt', 'desc'));
     const fsnap = await getDocs(fq);
     const allFiles = [];
     fsnap.forEach(fd => allFiles.push({ id: fd.id, ...fd.data() }));
 
-    const fileListEl = document.getElementById('fileList');
-    if (allFiles.length === 0) {
-      fileListEl.innerHTML = '<p class="empty">Hali fayl yo\'q.</p>';
-    } else {
+    // README render
+    const readmeFile = allFiles.find(f => isReadme(f.name));
+    const readmeBox = document.getElementById('readmeBox');
+    if (readmeFile) {
+      readmeBox.innerHTML = `<div class="readme"><h4>📘 README</h4>${simpleMarkdown(readmeFile.content)}</div>`;
+    }
+
+    function renderFileListOnly() {
+      const fileListEl = document.getElementById('fileList');
+      const term = fileSearchTerm.toLowerCase();
+      const shown = allFiles.filter(f => f.name.toLowerCase().includes(term));
+      if (shown.length === 0) {
+        fileListEl.innerHTML = '<p class="empty">Hech qanday fayl topilmadi.</p>';
+        return;
+      }
       fileListEl.innerHTML = '';
-      allFiles.forEach(data => {
+      shown.forEach(data => {
         const row = document.createElement('div');
         row.className = 'file-row';
         row.innerHTML = `
@@ -427,6 +572,7 @@
           <span class="meta">
             ${isHtmlFile(data.name) ? `<button class="small" data-act="run">▶ Ishga tushirish</button>` : ''}
             <button class="secondary small" data-act="viewbtn">Ko'rish</button>
+            <button class="secondary small" data-act="copy">📋 Nusxalash</button>
             ${isOwner ? `<button class="secondary small" data-act="edit">✏️ Tahrirlash</button>` : ''}
             ${isOwner ? `<button class="danger small" data-act="del">O'chirish</button>` : ''}
           </span>
@@ -436,6 +582,9 @@
         };
         row.querySelector('[data-act="view"]').onclick = showRaw;
         row.querySelector('[data-act="viewbtn"]').onclick = showRaw;
+        row.querySelector('[data-act="copy"]').onclick = () => {
+          navigator.clipboard.writeText(data.content).then(() => toast('Nusxalandi!'));
+        };
 
         const runBtn = row.querySelector('[data-act="run"]');
         if (runBtn) {
@@ -456,7 +605,7 @@
               }
             });
             document.getElementById('fileView').innerHTML =
-              `<h3>${esc(data.name)} — natija (bog'langan CSS/JS fayllar avtomatik qo'shildi)</h3><iframe class="preview" sandbox="allow-scripts" srcdoc="${esc(combined)}"></iframe>`;
+              `<h3>${esc(data.name)} — natija</h3><iframe class="preview" sandbox="allow-scripts" srcdoc="${esc(combined)}"></iframe>`;
           };
         }
 
@@ -488,13 +637,51 @@
           delBtn.onclick = async () => {
             if (!confirm("Faylni o'chirmoqchimisiz?")) return;
             await deleteDoc(doc(db, 'projects', projectId, 'files', data.id));
+            await updateDoc(doc(db, 'projects', projectId), { fileCount: increment(-1) });
             renderProject(projectId);
           };
         }
         fileListEl.appendChild(row);
       });
     }
+    renderFileListOnly();
 
+    // ----- Issues -----
+    document.getElementById('addIssueBtn').onclick = async () => {
+      const title = document.getElementById('issueTitle').value.trim();
+      if (!title) return;
+      await addDoc(collection(db, 'projects', projectId, 'issues'), {
+        title, status: 'open', authorEmail: currentUser.email, createdAt: serverTimestamp()
+      });
+      renderProject(projectId);
+    };
+    const iq = query(collection(db, 'projects', projectId, 'issues'), orderBy('createdAt', 'desc'));
+    const isnap = await getDocs(iq);
+    const issueListEl = document.getElementById('issueList');
+    if (isnap.empty) {
+      issueListEl.innerHTML = '<p class="empty">Hali muammo yo\'q.</p>';
+    } else {
+      issueListEl.innerHTML = '';
+      isnap.forEach(idoc => {
+        const iss = idoc.data();
+        const row = document.createElement('div');
+        row.className = 'issue-row';
+        row.innerHTML = `
+          <div class="title">${esc(iss.title)} <span class="${iss.status === 'open' ? 'status-open' : 'status-closed'}">● ${iss.status === 'open' ? 'ochiq' : 'yopiq'}</span></div>
+          <div class="meta" style="margin-top:4px;">${esc(iss.authorEmail)} ${isOwner ? `<button class="secondary small" data-toggle="${idoc.id}">${iss.status === 'open' ? 'Yopish' : 'Qayta ochish'}</button>` : ''}</div>
+        `;
+        const toggleBtn = row.querySelector('[data-toggle]');
+        if (toggleBtn) {
+          toggleBtn.onclick = async () => {
+            await updateDoc(doc(db, 'projects', projectId, 'issues', idoc.id), { status: iss.status === 'open' ? 'closed' : 'open' });
+            renderProject(projectId);
+          };
+        }
+        issueListEl.appendChild(row);
+      });
+    }
+
+    // ----- Comments -----
     const cq = query(collection(db, 'projects', projectId, 'comments'), orderBy('createdAt', 'asc'));
     const csnap = await getDocs(cq);
     const commentListEl = document.getElementById('commentList');
