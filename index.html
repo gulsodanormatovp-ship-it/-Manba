@@ -104,6 +104,7 @@
     <button class="iconbtn" id="themeToggle" title="Rejim">🌙</button>
     <button class="iconbtn" id="savedToggle" title="Saqlanganlar">⭐</button>
     <button class="iconbtn" id="notifToggle" title="Bildirishnomalar">🔔<span class="badge" id="notifBadge" style="display:none;">0</span></button>
+    <button class="secondary small" id="adminBtn" style="display:none;">🛠 Admin</button>
     <span id="authbox"></span>
   </div>
 </header>
@@ -135,6 +136,7 @@
   const db = getFirestore(app);
   const auth = getAuth(app);
 
+  const ADMIN_EMAIL = 'gulsodanormatovp@gmail.com';
   const root = document.getElementById('app');
   const authbox = document.getElementById('authbox');
   const modalRoot = document.getElementById('modalRoot');
@@ -388,7 +390,50 @@
     currentUser = user;
     if (user) await ensureUserProfile(user);
     renderAuthbox();
+    document.getElementById('adminBtn').style.display = (user && user.email === ADMIN_EMAIL) ? 'inline-block' : 'none';
   });
+
+  document.getElementById('adminBtn').onclick = renderAdminPanel;
+
+  async function renderAdminPanel() {
+    await loadProjects();
+    const totalLikes = allProjects.reduce((s, p) => s + (p.likes?.length || 0), 0);
+    const totalFiles = allProjects.reduce((s, p) => s + (p.fileCount || 0), 0);
+    root.innerHTML = `
+      <span class="back" id="backBtn">← ${t('projects')}</span>
+      <h2>🛠 Admin panel</h2>
+      <div class="stat-box">
+        <div class="stat-card"><div class="num">${allProjects.length}</div><div class="label">Jami loyihalar</div></div>
+        <div class="stat-card"><div class="num">${totalLikes}</div><div class="label">Jami yoqtirishlar</div></div>
+        <div class="stat-card"><div class="num">${totalFiles}</div><div class="label">Jami fayllar</div></div>
+      </div>
+      <h3>Barcha loyihalar</h3>
+      <div id="adminList"></div>
+    `;
+    document.getElementById('backBtn').onclick = () => { history.pushState({}, '', location.pathname); renderProjectList(); };
+    const listEl = document.getElementById('adminList');
+    listEl.innerHTML = '';
+    allProjects.forEach(p => {
+      const row = document.createElement('div');
+      row.className = 'card';
+      row.innerHTML = `
+        <div class="top">
+          <div class="name">${p.icon || '📁'} ${esc(p.name)}</div>
+          <div class="meta">
+            <span>${esc(p.ownerEmail || '')}</span>
+            <button class="secondary small" data-open="${p.id}">Ochish</button>
+            <button class="danger small" data-admin-del="${p.id}">O'chirish</button>
+          </div>
+        </div>`;
+      row.querySelector('[data-open]').onclick = () => openProject(p.id);
+      row.querySelector('[data-admin-del]').onclick = async () => {
+        if (!confirm('Rostdan ham o\'chirilsinmi (admin sifatida)?')) return;
+        await deleteDoc(doc(db, 'projects', p.id));
+        renderAdminPanel();
+      };
+      listEl.appendChild(row);
+    });
+  }
 
   // ---------- PROJECT LIST ----------
   async function loadProjects() {
@@ -406,6 +451,11 @@
         <input id="newProjectName" placeholder="Loyiha nomi..." />
         <input id="newProjectDesc" placeholder="Qisqa tavsif (ixtiyoriy)..." />
         <input id="newProjectTags" placeholder="Teglar (vergul bilan)" />
+        <select id="newProjectTemplate">
+          <option value="none">Andoza: Bo'sh</option>
+          <option value="html">Andoza: HTML asos</option>
+          <option value="css">Andoza: CSS sahifa</option>
+        </select>
         <button id="createProjectBtn">${t('create')}</button>
       </div>
       <div class="row">
@@ -425,12 +475,26 @@
       const description = document.getElementById('newProjectDesc').value.trim();
       const tagsRaw = document.getElementById('newProjectTags').value.trim();
       const tags = tagsRaw ? tagsRaw.split(',').map(x => x.trim().toLowerCase()).filter(Boolean) : [];
+      const template = document.getElementById('newProjectTemplate').value;
       if (!name) return;
-      await addDoc(collection(db, 'projects'), {
-        name, description, tags, icon,
+      const newProjRef = await addDoc(collection(db, 'projects'), {
+        name, description, tags, icon, version: 'v1.0', collaborators: [], relatedIds: [],
         ownerUid: currentUser.uid, ownerEmail: currentUser.email,
         likes: [], fileCount: 0, archived: false, createdAt: serverTimestamp()
       });
+      const templates = {
+        html: [{ name: 'index.html', content: '<!DOCTYPE html>\n<html>\n<head>\n<title>Sayt</title>\n</head>\n<body>\n<h1>Salom, Manba!</h1>\n</body>\n</html>' }],
+        css: [
+          { name: 'index.html', content: '<!DOCTYPE html>\n<html>\n<head>\n<link rel="stylesheet" href="style.css">\n</head>\n<body>\n<h1>CSS sahifa</h1>\n</body>\n</html>' },
+          { name: 'style.css', content: 'body { font-family: sans-serif; background: #f5f5f5; color: #222; }\nh1 { color: teal; }' }
+        ]
+      };
+      if (templates[template]) {
+        for (const f of templates[template]) {
+          await addDoc(collection(db, 'projects', newProjRef.id, 'files'), { name: f.name, content: f.content, createdAt: serverTimestamp() });
+        }
+        await updateDoc(doc(db, 'projects', newProjRef.id), { fileCount: templates[template].length });
+      }
       await loadProjects();
       renderProjectList();
     };
@@ -596,25 +660,40 @@
     if (!projSnap.exists()) { renderProjectList(); return; }
     const proj = projSnap.data();
     const isOwner = currentUser && currentUser.uid === proj.ownerUid;
+    const collaborators = proj.collaborators || [];
+    const isCollaborator = currentUser && collaborators.includes(currentUser.email);
+    const canEdit = isOwner || isCollaborator;
     const shareUrl = location.origin + location.pathname + '?p=' + projectId;
     const saved = await isSaved(projectId);
+    const relatedIds = proj.relatedIds || [];
+    let relatedHtml = '';
+    if (relatedIds.length) {
+      const relDocs = await Promise.all(relatedIds.map(id => getDoc(doc(db, 'projects', id))));
+      relatedHtml = relDocs.filter(d => d.exists()).map(d => `<span class="pill" style="cursor:pointer;" data-relid="${d.id}">🔗 ${esc(d.data().name)}</span>`).join(' ');
+    }
 
     root.innerHTML = `
       <span class="back" id="backBtn">← ${t('projects')}</span>
-      <h2>${proj.icon || '📁'} ${esc(proj.name)} ${proj.archived ? '<span class="pill">🗄 arxivlangan</span>' : ''}</h2>
+      <h2>${proj.icon || '📁'} ${esc(proj.name)} <span class="pill">${esc(proj.version || 'v1.0')}</span> ${proj.archived ? '<span class="pill">🗄 arxivlangan</span>' : ''}</h2>
       ${proj.description ? `<p style="color:var(--text-dim);">${esc(proj.description)}</p>` : ''}
       ${(proj.tags && proj.tags.length) ? `<div style="margin-bottom:14px;">${proj.tags.map(x=>`<span class="pill">#${esc(x)}</span>`).join('')}</div>` : ''}
+      ${relatedHtml ? `<div style="margin-bottom:14px;">Bog'liq: ${relatedHtml}</div>` : ''}
+      ${collaborators.length ? `<div style="margin-bottom:14px; font-size:12px; color:var(--text-dim);">👥 Hamkorlar: ${collaborators.map(e=>esc(e)).join(', ')}</div>` : ''}
       <div class="row">
         <button class="secondary small" id="shareBtn">🔗 Ulashish</button>
         <button class="secondary small" id="forkBtn">🍴 Fork</button>
         <button class="secondary small" id="saveBtn">${saved ? '⭐ Saqlangan' : '☆ Saqlash'}</button>
         <button class="secondary small" id="zipBtn">📦 Zip yuklab olish</button>
+        ${isOwner ? `<button class="secondary small" id="versionBtn">🏷 Versiya</button>` : ''}
+        ${isOwner ? `<button class="secondary small" id="collabBtn">👥 Hamkor qo'shish</button>` : ''}
+        ${isOwner ? `<button class="secondary small" id="relatedBtn">🔗 Bog'liq loyiha</button>` : ''}
         ${isOwner ? `<button class="secondary small" id="archiveBtn">${proj.archived ? '📤 Arxivdan chiqarish' : '🗄 Arxivlash'}</button>` : ''}
         ${isOwner ? `<button class="danger small" id="deleteProjectBtn">O'chirish</button>` : ''}
       </div>
 
       <div id="readmeBox"></div>
 
+      ${canEdit ? `
       <h3>Yangi fayl qo'shish</h3>
       <div class="row">
         <input id="fileName" placeholder="masalan: src/index.html, style.css, README.md" />
@@ -622,7 +701,7 @@
       <textarea id="fileContent" rows="8" placeholder="Kod yoki matnni shu yerga yozing..."></textarea>
       <div class="row" style="margin-top:10px;">
         <button id="addFileBtn">Faylni saqlash</button>
-      </div>
+      </div>` : ''}
 
       <h3>Fayllar</h3>
       <div class="row">
@@ -674,6 +753,10 @@
       toast('Zip yuklandi!');
     };
 
+    document.querySelectorAll('[data-relid]').forEach(el => {
+      el.onclick = () => openProject(el.getAttribute('data-relid'));
+    });
+
     if (isOwner) {
       document.getElementById('archiveBtn').onclick = async () => {
         await updateDoc(doc(db, 'projects', projectId), { archived: !proj.archived });
@@ -685,17 +768,39 @@
         history.pushState({}, '', location.pathname);
         renderProjectList();
       };
+      document.getElementById('versionBtn').onclick = async () => {
+        const v = prompt("Yangi versiya raqami:", proj.version || 'v1.0');
+        if (!v) return;
+        await updateDoc(doc(db, 'projects', projectId), { version: v.trim() });
+        renderProject(projectId);
+      };
+      document.getElementById('collabBtn').onclick = async () => {
+        const email = prompt("Hamkor email manzilini kiriting:");
+        if (!email) return;
+        await updateDoc(doc(db, 'projects', projectId), { collaborators: arrayUnion(email.trim().toLowerCase()) });
+        toast('Hamkor qo\'shildi!');
+        renderProject(projectId);
+      };
+      document.getElementById('relatedBtn').onclick = async () => {
+        const relId = prompt("Bog'lamoqchi bo'lgan loyiha havolasidan ID qismini kiriting (masalan ?p=XXXX dagi XXXX):");
+        if (!relId) return;
+        await updateDoc(doc(db, 'projects', projectId), { relatedIds: arrayUnion(relId.trim()) });
+        toast('Bog\'landi!');
+        renderProject(projectId);
+      };
     }
 
-    document.getElementById('addFileBtn').onclick = async () => {
-      const name = document.getElementById('fileName').value.trim();
-      const content = document.getElementById('fileContent').value;
-      if (!name) return;
-      await addDoc(collection(db, 'projects', projectId, 'files'), { name, content, createdAt: serverTimestamp() });
-      await updateDoc(doc(db, 'projects', projectId), { fileCount: increment(1) });
-      if (!isOwner) {} // n/a, owner is always the one adding here in current UI
-      renderProject(projectId);
-    };
+    const addFileBtnEl = document.getElementById('addFileBtn');
+    if (addFileBtnEl) {
+      addFileBtnEl.onclick = async () => {
+        const name = document.getElementById('fileName').value.trim();
+        const content = document.getElementById('fileContent').value;
+        if (!name) return;
+        await addDoc(collection(db, 'projects', projectId, 'files'), { name, content, createdAt: serverTimestamp() });
+        await updateDoc(doc(db, 'projects', projectId), { fileCount: increment(1) });
+        renderProject(projectId);
+      };
+    }
 
     document.getElementById('fileSearchBox').oninput = (e) => {
       fileSearchTerm = e.target.value;
@@ -716,7 +821,7 @@
     function renderFileListOnly() {
       const fileListEl = document.getElementById('fileList');
       const term = fileSearchTerm.toLowerCase();
-      const shown = allFiles.filter(f => f.name.toLowerCase().includes(term));
+      const shown = allFiles.filter(f => f.name.toLowerCase().includes(term) || (term.length > 2 && (f.content || '').toLowerCase().includes(term)));
       if (shown.length === 0) {
         fileListEl.innerHTML = '<p class="empty">Hech qanday fayl topilmadi.</p>';
         return;
@@ -747,8 +852,8 @@
               ${isHtmlFile(data.name) ? `<button class="small" data-act="run">▶ Ishga tushirish</button>` : ''}
               <button class="secondary small" data-act="viewbtn">Ko'rish</button>
               <button class="secondary small" data-act="copy">📋 Nusxalash</button>
-              ${isOwner ? `<button class="secondary small" data-act="edit">✏️ Tahrirlash</button>` : ''}
-              ${isOwner ? `<button class="secondary small" data-act="history">📜 Tarix</button>` : ''}
+              ${canEdit ? `<button class="secondary small" data-act="edit">✏️ Tahrirlash</button>` : ''}
+              ${canEdit ? `<button class="secondary small" data-act="history">📜 Tarix</button>` : ''}
               ${isOwner ? `<button class="danger small" data-act="del">O'chirish</button>` : ''}
             </span>
           `;
