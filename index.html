@@ -65,9 +65,15 @@
   .comment { padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
   .comment .who { color:var(--accent); font-weight:600; margin-right:6px; }
   .modal-bg { position:fixed; inset:0; background:rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; z-index:50; }
-  .modal { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:24px; width:320px; }
+  .modal { background:var(--panel); border:1px solid var(--border); border-radius:10px; width:380px; overflow:hidden; }
+  .modal-header { background:linear-gradient(135deg,#1a3a6b,#2b5faa); color:#fff; padding:20px 24px; font-size:19px; font-weight:700; }
+  .modal-body { padding:20px 24px; }
   .modal h3 { color:var(--text); margin-top:0; }
   .modal input { width:100%; margin-bottom:10px; }
+  .field-label { font-size:13px; color:var(--text-dim); margin-bottom:4px; display:block; }
+  .captcha-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .captcha-row input { margin-bottom:0; }
+  #captchaCanvas { border:1px solid var(--border); border-radius:6px; cursor:pointer; }
   .link { color:var(--accent); cursor:pointer; font-size:13px; }
   .likebtn { cursor:pointer; }
   .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--accent); color:#fff; padding:10px 18px; border-radius:8px; font-size:13px; font-weight:600; z-index:60; }
@@ -341,33 +347,78 @@
     });
   }
 
+  let captchaCode = '';
+  function drawCaptcha() {
+    const canvas = document.getElementById('captchaCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    captchaCode = Math.floor(10000 + Math.random() * 89999).toString();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = document.body.classList.contains('light') ? '#f0f0f0' : '#0d1117';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < 5; i++) {
+      ctx.strokeStyle = 'rgba(150,150,150,0.4)';
+      ctx.beginPath();
+      ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+      ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+      ctx.stroke();
+    }
+    ctx.font = 'bold 22px monospace';
+    ctx.fillStyle = '#8b949e';
+    for (let i = 0; i < captchaCode.length; i++) {
+      ctx.save();
+      ctx.translate(14 + i * 20, 30 + (Math.random() * 6 - 3));
+      ctx.rotate((Math.random() * 0.4 - 0.2));
+      ctx.fillText(captchaCode[i], 0, 0);
+      ctx.restore();
+    }
+  }
+
   function showAuthModal(mode) {
     modalRoot.innerHTML = `
       <div class="modal-bg" id="modalBg">
         <div class="modal">
-          <h3>${mode === 'login' ? t('login') : t('signup')}</h3>
-          <input id="authEmail" placeholder="Email" type="email" />
-          <input id="authPass" placeholder="Parol" type="password" />
-          <div id="authError" style="color:var(--danger); font-size:12px; margin-bottom:10px;"></div>
-          <div class="row">
-            <button id="authSubmit">${mode === 'login' ? t('login') : 'Yaratish'}</button>
-            <button class="secondary" id="authCancel">Bekor qilish</button>
+          <div class="modal-header">${mode === 'login' ? 'Kirish — Manba' : "Ro'yxatdan o'tish — Manba"}</div>
+          <div class="modal-body">
+            <span class="field-label">Email</span>
+            <input id="authEmail" placeholder="email@misol.uz" type="email" />
+            <span class="field-label">Parol</span>
+            <input id="authPass" placeholder="Parol" type="password" />
+            <span class="field-label">Rasmdagi raqamlarni kiriting</span>
+            <div class="captcha-row">
+              <input id="captchaInput" placeholder="Kod" maxlength="5" />
+              <canvas id="captchaCanvas" width="110" height="42" title="Yangilash uchun bosing"></canvas>
+            </div>
+            <div id="authError" style="color:var(--danger); font-size:12px; margin-bottom:10px;"></div>
+            <div class="row">
+              <button id="authSubmit">${mode === 'login' ? t('login') : 'Yaratish'}</button>
+              <button class="secondary" id="authCancel">Bekor qilish</button>
+            </div>
+            ${mode === 'login' ? '<span class="link" id="forgotLink">Parolni unutdingizmi?</span>' : ''}
           </div>
-          ${mode === 'login' ? '<span class="link" id="forgotLink">Parolni unutdingizmi?</span>' : ''}
         </div>
       </div>`;
+    drawCaptcha();
+    document.getElementById('captchaCanvas').onclick = drawCaptcha;
     document.getElementById('authCancel').onclick = () => modalRoot.innerHTML = '';
     document.getElementById('modalBg').onclick = (e) => { if (e.target.id === 'modalBg') modalRoot.innerHTML = ''; };
     document.getElementById('authSubmit').onclick = async () => {
       const email = document.getElementById('authEmail').value.trim();
       const pass = document.getElementById('authPass').value;
+      const captchaInput = document.getElementById('captchaInput').value.trim();
       const errEl = document.getElementById('authError');
+      if (captchaInput !== captchaCode) {
+        errEl.textContent = "Rasmdagi kod noto'g'ri kiritildi.";
+        drawCaptcha();
+        return;
+      }
       try {
         if (mode === 'login') await signInWithEmailAndPassword(auth, email, pass);
         else await createUserWithEmailAndPassword(auth, email, pass);
         modalRoot.innerHTML = '';
       } catch (e) {
         errEl.textContent = 'Xatolik: ' + e.message;
+        drawCaptcha();
       }
     };
     const forgot = document.getElementById('forgotLink');
