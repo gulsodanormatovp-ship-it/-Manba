@@ -110,6 +110,8 @@
     <button class="iconbtn" id="themeToggle" title="Rejim">🌙</button>
     <button class="iconbtn" id="savedToggle" title="Saqlanganlar">⭐</button>
     <button class="iconbtn" id="notifToggle" title="Bildirishnomalar">🔔<span class="badge" id="notifBadge" style="display:none;">0</span></button>
+    <button class="secondary small" id="pricingBtn">💎 Rejalar</button>
+    <button class="secondary small" id="leaderboardBtn">🏆 Reyting</button>
     <button class="secondary small" id="adminBtn" style="display:none;">🛠 Admin</button>
     <span id="authbox"></span>
   </div>
@@ -417,7 +419,13 @@
         else await createUserWithEmailAndPassword(auth, email, pass);
         modalRoot.innerHTML = '';
       } catch (e) {
-        errEl.textContent = 'Xatolik: ' + e.message;
+        if (e.code === 'auth/email-already-in-use') {
+          errEl.innerHTML = 'Bu email allaqachon ro\'yxatdan o\'tgan. <span class="link" id="switchToLogin">Kirish</span> tugmasini bosing.';
+          const sw = document.getElementById('switchToLogin');
+          if (sw) sw.onclick = () => showAuthModal('login');
+        } else {
+          errEl.textContent = 'Xatolik: ' + e.message;
+        }
         drawCaptcha();
       }
     };
@@ -445,6 +453,80 @@
   });
 
   document.getElementById('adminBtn').onclick = renderAdminPanel;
+  document.getElementById('pricingBtn').onclick = showPricingModal;
+  document.getElementById('leaderboardBtn').onclick = renderLeaderboard;
+
+  function showPricingModal() {
+    modalRoot.innerHTML = `
+      <div class="modal-bg" id="modalBg">
+        <div class="modal" style="width:520px;">
+          <div class="modal-header">💎 Manba rejalari</div>
+          <div class="modal-body">
+            <div style="display:flex; gap:14px;">
+              <div style="flex:1; border:1px solid var(--border); border-radius:10px; padding:16px;">
+                <h3 style="margin-top:0;">Bepul</h3>
+                <div style="font-size:22px; font-weight:700; margin-bottom:10px;">0 so'm</div>
+                <div style="font-size:13px; color:var(--text-dim); line-height:1.8;">
+                  ✅ Cheksiz loyiha<br>
+                  ✅ Fayl saqlash<br>
+                  ✅ Fork, like, izoh<br>
+                  ✅ Jamoat bilan ulashish
+                </div>
+              </div>
+              <div style="flex:1; border:2px solid var(--accent); border-radius:10px; padding:16px; position:relative;">
+                <span class="pill" style="position:absolute; top:-10px; right:12px; background:var(--accent); color:#fff; border:none;">Tez orada</span>
+                <h3 style="margin-top:0;">Pro</h3>
+                <div style="font-size:22px; font-weight:700; margin-bottom:10px;">29,000 so'm<span style="font-size:12px; color:var(--text-dim);">/oy</span></div>
+                <div style="font-size:13px; color:var(--text-dim); line-height:1.8;">
+                  ✅ Bepuldagi hammasi<br>
+                  ⭐ Katta fayl hajmi<br>
+                  ⭐ Shaxsiy (yopiq) loyihalar<br>
+                  ⭐ Reklamasiz interfeys<br>
+                  ⭐ Profilda "Pro" belgisi
+                </div>
+              </div>
+            </div>
+            <p style="font-size:12px; color:var(--text-dim); margin-top:14px;">To'lov tizimi (Payme/Click) hali ulanmagan — tez orada ishga tushadi.</p>
+            <button class="secondary" id="pricingClose">Yopish</button>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('pricingClose').onclick = () => modalRoot.innerHTML = '';
+    document.getElementById('modalBg').onclick = (e) => { if (e.target.id === 'modalBg') modalRoot.innerHTML = ''; };
+  }
+
+  async function renderLeaderboard() {
+    await loadProjects();
+    const byUser = {};
+    allProjects.forEach(p => {
+      const key = p.ownerUid;
+      if (!byUser[key]) byUser[key] = { email: p.ownerEmail, likes: 0, projects: 0 };
+      byUser[key].likes += (p.likes?.length || 0);
+      byUser[key].projects += 1;
+    });
+    const ranked = Object.entries(byUser).sort((a, b) => b[1].likes - a[1].likes).slice(0, 20);
+    root.innerHTML = `
+      <span class="back" id="backBtn">← ${t('projects')}</span>
+      <h2>🏆 Reyting — eng faol foydalanuvchilar</h2>
+      <div id="lbList"></div>
+    `;
+    document.getElementById('backBtn').onclick = () => { history.pushState({}, '', location.pathname); renderProjectList(); };
+    const lbList = document.getElementById('lbList');
+    lbList.innerHTML = '';
+    const medals = ['🥇','🥈','🥉'];
+    ranked.forEach(([uid, info], idx) => {
+      const row = document.createElement('div');
+      row.className = 'card';
+      row.innerHTML = `
+        <div class="top">
+          <div class="name">${medals[idx] || (idx+1)+'.'} ${esc(info.email)}</div>
+          <div class="meta"><span>${info.projects} loyiha</span><span>❤️ ${info.likes}</span></div>
+        </div>`;
+      row.onclick = () => renderProfile(uid, info.email);
+      lbList.appendChild(row);
+    });
+    if (ranked.length === 0) lbList.innerHTML = '<p class="empty">Hali hech kim yo\'q.</p>';
+  }
 
   async function renderAdminPanel() {
     await loadProjects();
@@ -499,6 +581,7 @@
       <h2>${t('projects')}</h2>
       <div class="row">
         <input id="newProjectIcon" class="icon-input" placeholder="📁" maxlength="2" />
+        <input id="newProjectColor" type="color" value="#58a6ff" style="width:44px; padding:2px; height:38px;" title="Loyiha rangi" />
         <input id="newProjectName" placeholder="Loyiha nomi..." />
         <input id="newProjectDesc" placeholder="Qisqa tavsif (ixtiyoriy)..." />
         <input id="newProjectTags" placeholder="Teglar (vergul bilan)" />
@@ -516,12 +599,14 @@
         <button id="sortNew" class="${sortMode==='new'?'active':''}">${t('newest')}</button>
         <button id="sortTop" class="${sortMode==='top'?'active':''}">${t('top')}</button>
       </div>
+      <div id="popularTags" style="margin-bottom:14px;"></div>
       <div id="projectList"><p class="empty">Yuklanmoqda...</p></div>
     `;
 
     document.getElementById('createProjectBtn').onclick = async () => {
       if (!currentUser) { showAuthModal('login'); return; }
       const icon = document.getElementById('newProjectIcon').value.trim() || '📁';
+      const color = document.getElementById('newProjectColor').value || '#58a6ff';
       const name = document.getElementById('newProjectName').value.trim();
       const description = document.getElementById('newProjectDesc').value.trim();
       const tagsRaw = document.getElementById('newProjectTags').value.trim();
@@ -529,7 +614,7 @@
       const template = document.getElementById('newProjectTemplate').value;
       if (!name) return;
       const newProjRef = await addDoc(collection(db, 'projects'), {
-        name, description, tags, icon, version: 'v1.0', collaborators: [], relatedIds: [],
+        name, description, tags, icon, color, version: 'v1.0', collaborators: [], relatedIds: [],
         ownerUid: currentUser.uid, ownerEmail: currentUser.email,
         likes: [], fileCount: 0, archived: false, createdAt: serverTimestamp()
       });
@@ -556,6 +641,26 @@
 
     await loadProjects();
     renderProjectCards();
+    renderPopularTags();
+  }
+
+  function renderPopularTags() {
+    const box = document.getElementById('popularTags');
+    if (!box) return;
+    const counts = {};
+    allProjects.forEach(p => (p.tags || []).forEach(tag => { counts[tag] = (counts[tag] || 0) + 1; }));
+    const top = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+    if (top.length === 0) { box.innerHTML = ''; return; }
+    box.innerHTML = 'Ommabop teglar: ' + top.map(([tag, count]) =>
+      `<span class="pill" style="cursor:pointer;" data-tag="${esc(tag)}">#${esc(tag)} (${count})</span>`
+    ).join(' ');
+    box.querySelectorAll('[data-tag]').forEach(el => {
+      el.onclick = () => {
+        searchTerm = el.getAttribute('data-tag');
+        document.getElementById('searchBox').value = searchTerm;
+        renderProjectCards();
+      };
+    });
   }
 
   function renderProjectCards(listOverride, ownerMode) {
@@ -584,6 +689,7 @@
       const liked = currentUser && likes.includes(currentUser.uid);
       const card = document.createElement('div');
       card.className = 'card';
+      card.style.borderLeft = '4px solid ' + (p.color || 'var(--accent)');
       card.innerHTML = `
         <div class="top">
           <div>
@@ -1072,6 +1178,13 @@
       };
     }
   }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      const sb = document.getElementById('searchBox');
+      if (sb) { e.preventDefault(); sb.focus(); }
+    }
+  });
 
   renderAuthbox();
   const params = new URLSearchParams(location.search);
