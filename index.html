@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OmniCode Ultimate Enterprise v5.0 — Cloud & AI Supercluster</title>
+<title>OmniCode Ultimate v6.0 — Real Code Studio</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
 ::-webkit-scrollbar{width:6px;height:6px}
@@ -11,526 +11,134 @@
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
 :root[data-theme="dark"]{
-  --bg:#03050a;
-  --panel:#080d1a;
-  --panel2:#0c1427;
-  --border:#1a233a;
-  --text:#f8fafc;
-  --muted:#8892b0;
-  --blue:#3b82f6;
-  --indigo:#6366f1;
-  --purple:#8b5cf6;
-  --green:#10b981;
-  --cyan:#06b6d4;
-  --amber:#f59e0b;
-  --danger:#ef4444;
-  --pink:#ec4899;
+  --bg:#03050a; --panel:#080d1a; --panel2:#0c1427; --border:#1a233a;
+  --text:#f8fafc; --muted:#8892b0; --blue:#3b82f6; --indigo:#6366f1;
+  --purple:#8b5cf6; --green:#10b981; --cyan:#06b6d4; --amber:#f59e0b;
+  --danger:#ef4444; --pink:#ec4899;
 }
 :root[data-theme="light"]{
-  --bg:#f1f5f9;
-  --panel:#ffffff;
-  --panel2:#f8fafc;
-  --border:#cbd5e1;
-  --text:#0f172a;
-  --muted:#64748b;
-  --blue:#2563eb;
-  --indigo:#4f46e5;
-  --purple:#7c3aed;
-  --green:#059669;
-  --cyan:#0891b2;
-  --amber:#d97706;
-  --danger:#dc2626;
-  --pink:#db2777;
+  --bg:#f1f5f9; --panel:#ffffff; --panel2:#f8fafc; --border:#cbd5e1;
+  --text:#0f172a; --muted:#64748b; --blue:#2563eb; --indigo:#4f46e5;
+  --purple:#7c3aed; --green:#059669; --cyan:#0891b2; --amber:#d97706;
+  --danger:#dc2626; --pink:#db2777;
 }
-
-body{
-  font-family:'Inter',system-ui,-apple-system,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-  transition:background 0.3s, color 0.3s;
-}
-
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer;border:none;background:none}
 
-.top{
-  height:70px;
-  border-bottom:1px solid var(--border);
-  background:rgba(8,13,26,0.85);
-  backdrop-filter:blur(20px);
-  display:flex;
-  align-items:center;
-  padding:0 25px;
-  gap:15px;
-  position:sticky;
-  top:0;
-  z-index:100;
-}
-
-.logo{
-  font-size:22px;
-  font-weight:900;
-  letter-spacing:-0.5px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  cursor:pointer;
-}
-.logoBox{
-  width:38px;height:38px;border-radius:12px;
-  display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  box-shadow:0 0 25px rgba(59,130,246,0.4);
-  font-size:18px;
-}
-
-.search{
-  flex:1;
-  max-width:420px;
-  position:relative;
-}
-.search input{
-  width:100%;
-  background:var(--panel2);
-  border:1px solid var(--border);
-  color:var(--text);
-  padding:10px 14px 10px 38px;
-  border-radius:12px;
-  outline:none;
-  font-size:13px;
-}
+.top{height:70px;border-bottom:1px solid var(--border);background:rgba(8,13,26,.85);backdrop-filter:blur(20px);display:flex;align-items:center;padding:0 25px;gap:15px;position:sticky;top:0;z-index:100}
+.logo{font-size:22px;font-weight:900;letter-spacing:-.5px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.logoBox{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--purple));box-shadow:0 0 25px rgba(59,130,246,.4);font-size:18px}
+.search{flex:1;max-width:420px;position:relative}
+.search input{width:100%;background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:10px 14px 10px 38px;border-radius:12px;outline:none;font-size:13px}
 .search input:focus{border-color:var(--blue)}
 .search span{position:absolute;left:12px;top:10px;color:var(--muted);font-size:16px}
-
 .topBtns{margin-left:auto;display:flex;gap:10px;align-items:center}
-.iconBtn{
-  width:38px;height:38px;
-  border:1px solid var(--border);
-  background:var(--panel2);
-  color:var(--text);
-  border-radius:11px;
-  display:grid;place-items:center;
-  transition:all 0.2s;
-  position:relative;
-}
+.iconBtn{width:38px;height:38px;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:11px;display:grid;place-items:center;transition:all .2s}
 .iconBtn:hover{border-color:var(--blue);transform:translateY(-1px)}
-
-.avatar{
-  width:38px;height:38px;border-radius:50%;
-  display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--green),var(--cyan));
-  font-weight:900;
-  color:#fff;
-  cursor:pointer;
-}
-
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--green),var(--cyan));font-weight:900;color:#fff;cursor:pointer}
 .layout{display:flex;min-height:calc(100vh - 70px)}
-
-.side{
-  width:260px;
-  border-right:1px solid var(--border);
-  background:var(--panel);
-  padding:20px 12px;
-  position:fixed;
-  top:70px;bottom:0;
-  overflow-y:auto;
-  z-index:90;
-}
-.sideTitle{
-  font-size:10px;
-  text-transform:uppercase;
-  color:var(--muted);
-  padding:10px 10px 4px;
-  letter-spacing:1px;
-  font-weight:800;
-}
-.nav{
-  padding:10px 12px;
-  border-radius:10px;
-  color:var(--muted);
-  margin:3px 0;
-  display:flex;
-  gap:12px;
-  align-items:center;
-  cursor:pointer;
-  transition:all 0.15s;
-  font-size:13px;
-  font-weight:600;
-}
-.nav:hover,.nav.active{
-  background:var(--panel2);
-  color:var(--text);
-}
-.nav.active{
-  background:linear-gradient(90deg,rgba(59,130,246,0.15),transparent);
-  color:var(--blue);
-  border-left:3px solid var(--blue);
-}
-
-.main{
-  margin-left:260px;
-  width:calc(100% - 260px);
-  padding:28px;
-  max-width:1700px;
-}
-
-.hero{
-  border:1px solid var(--border);
-  background:
-    radial-gradient(circle at 90% 10%,rgba(59,130,246,0.15),transparent 40%),
-    linear-gradient(135deg,var(--panel),var(--panel2));
-  border-radius:22px;
-  padding:34px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:25px;
-  margin-bottom:24px;
-}
-.hero h1{font-size:36px;line-height:1.2;margin-bottom:10px;font-weight:900}
-.gradient{
-  background:linear-gradient(90deg,var(--blue),var(--purple),var(--cyan));
-  -webkit-background-clip:text;
-  color:transparent;
-}
+.side{width:260px;border-right:1px solid var(--border);background:var(--panel);padding:20px 12px;position:fixed;top:70px;bottom:0;overflow-y:auto;z-index:90}
+.sideTitle{font-size:10px;text-transform:uppercase;color:var(--muted);padding:10px 10px 4px;letter-spacing:1px;font-weight:800}
+.nav{padding:10px 12px;border-radius:10px;color:var(--muted);margin:3px 0;display:flex;gap:12px;align-items:center;cursor:pointer;transition:all .15s;font-size:13px;font-weight:600}
+.nav:hover,.nav.active{background:var(--panel2);color:var(--text)}
+.nav.active{background:linear-gradient(90deg,rgba(59,130,246,.15),transparent);color:var(--blue);border-left:3px solid var(--blue)}
+.main{margin-left:260px;width:calc(100% - 260px);padding:28px;max-width:1700px}
+.hero{border:1px solid var(--border);background:radial-gradient(circle at 90% 10%,rgba(59,130,246,.15),transparent 40%),linear-gradient(135deg,var(--panel),var(--panel2));border-radius:22px;padding:34px;display:flex;justify-content:space-between;align-items:center;gap:25px;margin-bottom:24px}
+.hero h1{font-size:34px;line-height:1.2;margin-bottom:10px;font-weight:900}
+.gradient{background:linear-gradient(90deg,var(--blue),var(--purple),var(--cyan));-webkit-background-clip:text;color:transparent}
 .hero p{color:var(--muted);max-width:600px;line-height:1.5;font-size:15px}
-
 .actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
-.btn{
-  border:1px solid var(--border);
-  color:var(--text);
-  background:var(--panel2);
-  padding:11px 18px;
-  border-radius:11px;
-  font-weight:700;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  transition:all 0.2s;
-  font-size:13px;
-}
+.btn{border:1px solid var(--border);color:var(--text);background:var(--panel2);padding:11px 18px;border-radius:11px;font-weight:700;display:inline-flex;align-items:center;gap:8px;transition:all .2s;font-size:13px}
 .btn:hover{transform:translateY(-1px);border-color:var(--muted)}
-.btn.primary{
-  border:none;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  color:white;
-  box-shadow:0 6px 20px rgba(59,130,246,0.3);
-}
-.btn.green{background:linear-gradient(135deg,#059669,var(--green));color:white;border:none}
-.btn.danger{background:linear-gradient(135deg,#dc2626,var(--danger));color:white;border:none}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:16px;
-  margin-bottom:24px;
-}
-.stat{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:18px;
-  position:relative;
-}
+.btn.primary{border:none;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;box-shadow:0 6px 20px rgba(59,130,246,.3)}
+.btn.green{background:linear-gradient(135deg,#059669,var(--green));color:#fff;border:none}
+.btn.danger{background:linear-gradient(135deg,#dc2626,var(--danger));color:#fff;border:none}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.badge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;letter-spacing:.3px}
+.badge.live{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.badge.demo{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px}
 .stat small{color:var(--muted);font-weight:700;text-transform:uppercase;font-size:10px}
 .stat strong{display:block;font-size:26px;margin-top:6px;font-weight:900}
-
-.grid{
-  display:grid;
-  grid-template-columns:1.6fr 1fr;
-  gap:20px;
-}
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:18px;
-  overflow:hidden;
-  margin-bottom:20px;
-}
-.cardHead{
-  padding:16px 20px;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
+.grid{display:grid;grid-template-columns:1.6fr 1fr;gap:20px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:20px}
+.cardHead{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
 .cardHead h2{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px}
-
-.repo{
-  padding:16px 20px;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
+.repo{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px}
 .repo:last-child{border-bottom:0}
 .repo:hover{background:var(--panel2)}
 .repoName{color:var(--blue);font-weight:800;font-size:15px;cursor:pointer}
 .repoDesc{color:var(--muted);font-size:13px;margin-top:3px}
 .repoRight{color:var(--muted);font-size:13px;display:flex;align-items:center;gap:12px}
-
-.activity{
-  padding:16px 20px;
-  border-bottom:1px solid var(--border);
-  color:var(--text);
-  font-size:13px;
-}
+.activity{padding:16px 20px;border-bottom:1px solid var(--border);color:var(--text);font-size:13px}
 .activity:last-child{border-bottom:0}
 .activity small{display:block;color:var(--muted);margin-top:3px;font-size:11px}
-
+.empty{padding:30px 20px;color:var(--muted);font-size:13px;text-align:center}
 .page{display:none}
 .page.active{display:block}
-
-/* WORKSPACE & EDITOR */
-.repoPage{
-  display:grid;
-  grid-template-columns:260px 1fr;
-  gap:18px;
-}
-.fileTree,.editorBox,.terminalBox{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:16px;
-  overflow:hidden;
-}
-.treeHead,.editorHead,.termHead{
-  padding:14px 18px;
-  border-bottom:1px solid var(--border);
-  font-weight:800;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  font-size:13px;
-}
-.fileList{max-height:480px;overflow-y:auto;padding:6px}
-.fileItem{
-  padding:10px 14px;
-  color:var(--muted);
-  cursor:pointer;
-  border-radius:8px;
-  margin:2px 0;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:13px;
-  font-weight:500;
-}
+.repoPage{display:grid;grid-template-columns:260px 1fr;gap:18px}
+.fileTree,.editorBox,.terminalBox{background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.treeHead,.editorHead,.termHead{padding:14px 18px;border-bottom:1px solid var(--border);font-weight:800;display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.fileList{max-height:400px;overflow-y:auto;padding:6px}
+.fileItem{padding:10px 14px;color:var(--muted);cursor:pointer;border-radius:8px;margin:2px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;font-weight:500}
 .fileItem:hover,.fileItem.selected{background:var(--panel2);color:var(--text)}
 .fileItem.selected{box-shadow:inset 3px 0 var(--blue);color:var(--blue)}
-
-.codeArea{
-  width:100%;
-  min-height:450px;
-  background:#020408;
-  color:#e2e8f0;
-  border:none;
-  padding:18px;
-  font-family:'Fira Code',Consolas,monospace;
-  font-size:13px;
-  line-height:1.6;
-  outline:none;
-  resize:vertical;
-}
-
-.terminal{
-  margin-top:16px;
-  background:#020408;
-  border:1px solid var(--border);
-  border-radius:16px;
-  overflow:hidden;
-}
-.termBody{
-  padding:16px;
-  font-family:monospace;
-  color:var(--green);
-  min-height:150px;
-  max-height:260px;
-  overflow-y:auto;
-  font-size:12px;
-  line-height:1.5;
-}
-.termInputRow{
-  display:flex;
-  align-items:center;
-  background:#050812;
-  border-top:1px solid var(--border);
-  padding:0 12px;
-}
+.fileItem .del{opacity:0;color:var(--danger);font-size:11px}
+.fileItem:hover .del{opacity:1}
+.newFileRow{display:flex;gap:6px;padding:8px}
+.newFileRow input{flex:1;background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:8px;font-size:12px;outline:none}
+.codeArea{width:100%;min-height:380px;background:#020408;color:#e2e8f0;border:none;padding:18px;font-family:'Fira Code',Consolas,monospace;font-size:13px;line-height:1.6;outline:none;resize:vertical}
+.terminal{margin-top:16px;background:#020408;border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.termBody{padding:16px;font-family:monospace;color:var(--green);min-height:140px;max-height:220px;overflow-y:auto;font-size:12px;line-height:1.5;white-space:pre-wrap}
+.termInputRow{display:flex;align-items:center;background:#050812;border-top:1px solid var(--border);padding:0 12px}
 .termInputRow span{color:var(--blue);font-weight:bold;font-family:monospace}
-.termInput{
-  flex:1;
-  background:none;
-  border:none;
-  color:white;
-  padding:12px 10px;
-  font-family:monospace;
-  outline:none;
-  font-size:13px;
-}
-
-/* AI CHATBOT */
-.aiContainer{
-  display:grid;
-  grid-template-columns:1fr 350px;
-  gap:18px;
-  height:calc(100vh - 150px);
-}
-.chatBox{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:18px;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-.chatMessages{
-  flex:1;
-  padding:20px;
-  overflow-y:auto;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-.msg{
-  max-width:82%;
-  padding:14px 18px;
-  border-radius:14px;
-  font-size:13px;
-  line-height:1.5;
-}
-.msg.user{
-  background:linear-gradient(135deg,var(--blue),var(--indigo));
-  color:white;
-  align-self:flex-end;
-}
-.msg.ai{
-  background:var(--panel2);
-  border:1px solid var(--border);
-  color:var(--text);
-  align-self:flex-start;
-}
-.chatInputArea{
-  padding:16px;
-  border-top:1px solid var(--border);
-  display:flex;
-  gap:10px;
-}
-.chatInputArea input{
-  flex:1;
-  background:var(--panel2);
-  border:1px solid var(--border);
-  color:var(--text);
-  padding:12px 16px;
-  border-radius:12px;
-  outline:none;
-  font-size:13px;
-}
-
-/* MODAL */
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.75);
-  backdrop-filter:blur(6px);
-  z-index:200;
-  place-items:center;
-  padding:20px;
-}
+.termInput{flex:1;background:none;border:none;color:#fff;padding:12px 10px;font-family:monospace;outline:none;font-size:13px}
+.aiContainer{display:grid;grid-template-columns:1fr 320px;gap:18px;height:calc(100vh - 150px);min-height:520px}
+.chatBox{background:var(--panel);border:1px solid var(--border);border-radius:18px;display:flex;flex-direction:column;overflow:hidden}
+.chatMessages{flex:1;padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.msg{max-width:82%;padding:14px 18px;border-radius:14px;font-size:13px;line-height:1.5;white-space:pre-wrap}
+.msg.user{background:linear-gradient(135deg,var(--blue),var(--indigo));color:#fff;align-self:flex-end}
+.msg.ai{background:var(--panel2);border:1px solid var(--border);color:var(--text);align-self:flex-start}
+.msg.ai.loading{color:var(--muted);font-style:italic}
+.chatInputArea{padding:16px;border-top:1px solid var(--border);display:flex;gap:10px}
+.chatInputArea input,.chatInputArea select{flex:1;background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:12px;outline:none;font-size:13px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:200;place-items:center;padding:20px}
 .modal.show{display:grid}
-.modalBox{
-  width:min(520px,100%);
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:26px;
-  box-shadow:0 30px 60px rgba(0,0,0,0.6);
-}
+.modalBox{width:min(560px,100%);max-height:90vh;overflow-y:auto;background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:26px;box-shadow:0 30px 60px rgba(0,0,0,.6)}
 .modalBox h2{margin-bottom:18px;font-size:20px;font-weight:800}
-.modalBox input,.modalBox textarea,.modalBox select{
-  width:100%;
-  background:var(--panel2);
-  border:1px solid var(--border);
-  color:var(--text);
-  padding:12px 14px;
-  border-radius:11px;
-  outline:none;
-  margin-bottom:12px;
-  font-size:13px;
-}
+.modalBox input,.modalBox textarea,.modalBox select{width:100%;background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:11px;outline:none;margin-bottom:12px;font-size:13px}
 .modalBox textarea{height:100px;resize:vertical}
 .modalActions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}
-
-/* TOAST */
-.toast{
-  position:fixed;
-  right:25px;
-  bottom:25px;
-  background:var(--panel);
-  border:1px solid var(--border);
-  color:var(--text);
-  padding:14px 20px;
-  border-radius:12px;
-  display:none;
-  z-index:1000;
-  box-shadow:0 20px 40px rgba(0,0,0,0.5);
-  font-weight:700;
-  font-size:13px;
-}
+.toast{position:fixed;right:25px;bottom:25px;background:var(--panel);border:1px solid var(--border);color:var(--text);padding:14px 20px;border-radius:12px;display:none;z-index:1000;box-shadow:0 20px 40px rgba(0,0,0,.5);font-weight:700;font-size:13px;max-width:340px}
 .toast.show{display:block}
-
-/* GRID TOOLS */
-.toolsGrid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-}
-.toolCard{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
+.toolsGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.toolCard{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px}
 .toolCard h3{font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px}
 .toolCard p{color:var(--muted);font-size:12px;line-height:1.4}
-
-@media(max-width:1024px){
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .grid,.aiContainer,.toolsGrid{grid-template-columns:1fr}
-}
-@media(max-width:768px){
-  .side{width:65px;padding:15px 6px}
-  .sideTitle,.nav span:not(.emoji){display:none}
-  .nav{justify-content:center;padding:12px}
-  .main{margin-left:65px;width:calc(100% - 65px);padding:18px}
-  .hero{flex-direction:column;align-items:flex-start}
-}
+.previewFrame{width:100%;height:420px;border:none;background:#fff;border-radius:0 0 16px 16px}
+.notice{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);color:var(--muted);font-size:12px;padding:10px 14px;border-radius:10px;margin:14px 20px}
+@media(max-width:1024px){.stats{grid-template-columns:repeat(2,1fr)}.grid,.aiContainer,.toolsGrid{grid-template-columns:1fr}.repoPage{grid-template-columns:1fr}}
+@media(max-width:768px){.side{width:65px;padding:15px 6px}.sideTitle,.nav span:not(.emoji){display:none}.nav{justify-content:center;padding:12px}.main{margin-left:65px;width:calc(100% - 65px);padding:18px}.hero{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
-
 <body>
 
 <header class="top">
   <div class="logo" onclick="showPage('dashboard',document.querySelectorAll('.nav')[0])">
     <div class="logoBox">⚡</div>
-    OmniCode <span style="font-size:10px;background:var(--blue);padding:2px 6px;border-radius:6px;color:white">v5.0</span>
+    OmniCode <span style="font-size:10px;background:var(--blue);padding:2px 6px;border-radius:6px;color:#fff">v6.0</span>
   </div>
-
   <div class="search">
     <span>⌕</span>
-    <input id="globalSearch" placeholder="500+ super modullar, repolar, API yoki sozlamalar qidiring... (Ctrl + K)">
+    <input id="globalSearch" placeholder="Repolar, snippetlar, sozlamalarni qidiring... (Ctrl+K)" oninput="doGlobalSearch(this.value)">
   </div>
-
   <div class="topBtns">
-    <button class="iconBtn" onclick="toggleTheme()" title="Mavzuni almashtirish (Dark/Light)">🌓</button>
-    <button class="iconBtn" onclick="toggleAIModal()" title="Omni AI Assistant">🤖</button>
-    <button class="iconBtn" onclick="openSnippets()" title="Snippet Kutubxonasi">📋</button>
-    <button class="iconBtn" onclick="newRepo()" title="Yangi Repozitoriy">＋</button>
+    <button class="iconBtn" onclick="toggleTheme()" title="Mavzu">🌓</button>
+    <button class="iconBtn" onclick="showPage('aiStudio',document.querySelectorAll('.side .nav')[5])" title="AI Studio">🤖</button>
+    <button class="iconBtn" onclick="openSnippets()" title="Snippetlar">📋</button>
+    <button class="iconBtn" onclick="newRepo()" title="Yangi repo">＋</button>
     <div class="avatar" onclick="showPage('settingsPage', null)">O</div>
   </div>
 </header>
@@ -540,24 +148,23 @@ button{cursor:pointer;border:none;background:none}
   <div class="sideTitle">Asosiy</div>
   <div class="nav active" onclick="showPage('dashboard',this)"><span class="emoji">⌂</span><span>Dashboard</span></div>
   <div class="nav" onclick="showPage('repositories',this)"><span class="emoji">▣</span><span>Repositories</span></div>
-  <div class="nav" onclick="showPage('explore',this)"><span class="emoji">◈</span><span>Explore Market</span></div>
+  <div class="nav" onclick="showPage('explore',this)"><span class="emoji">◈</span><span>Explore</span></div>
   <div class="nav" onclick="showPage('activity',this)"><span class="emoji">◷</span><span>Activity Log</span></div>
 
-  <div class="sideTitle">Dev Tools & Super Modules (500+)</div>
-  <div class="nav" onclick="openEditor()"><span class="emoji">⌘</span><span>Code Studio Editor</span></div>
-  <div class="nav" onclick="showPage('aiStudio',this)"><span class="emoji">🤖</span><span>Omni AI Studio</span></div>
+  <div class="sideTitle">Dev Tools</div>
+  <div class="nav" onclick="openEditor()"><span class="emoji">⌘</span><span>Code Studio</span></div>
+  <div class="nav" onclick="showPage('aiStudio',this)"><span class="emoji">🤖</span><span>AI Studio</span></div>
   <div class="nav" onclick="showPage('databaseManager',this)"><span class="emoji">🗄️</span><span>SQL / NoSQL DB</span></div>
-  <div class="nav" onclick="showPage('apiTester',this)"><span class="emoji">⚡</span><span>REST & WebSocket API</span></div>
-  <div class="nav" onclick="showPage('snippetHub',this)"><span class="emoji">📋</span><span>Snippets Manager</span></div>
-  <div class="nav" onclick="showPage('envManager',this)"><span class="emoji">🔒</span><span>Environment Secrets</span></div>
-  <div class="nav" onclick="showPage('cronManager',this)"><span class="emoji">⏰</span><span>Cron / Background</span></div>
-  <div class="nav" onclick="showPage('dockerCluster',this)"><span class="emoji">🐳</span><span>Docker Containers</span></div>
-  <div class="nav" onclick="showPage('megaSupercluster',this)"><span class="emoji">🌌</span><span>500+ Supercluster Core</span></div>
+  <div class="nav" onclick="showPage('apiTester',this)"><span class="emoji">⚡</span><span>REST API Tester</span></div>
+  <div class="nav" onclick="showPage('snippetHub',this)"><span class="emoji">📋</span><span>Snippets</span></div>
+  <div class="nav" onclick="showPage('envManager',this)"><span class="emoji">🔒</span><span>Environment Vars</span></div>
+  <div class="nav" onclick="showPage('cronManager',this)"><span class="emoji">⏰</span><span>Cron / Workers</span></div>
+  <div class="nav" onclick="showPage('dockerCluster',this)"><span class="emoji">🐳</span><span>Docker</span></div>
 
   <div class="sideTitle">Cloud & DevOps</div>
   <div class="nav" onclick="showPage('deployments',this)"><span class="emoji">🚀</span><span>Deploy & Render</span></div>
-  <div class="nav" onclick="showPage('analyticsPage',this)"><span class="emoji">📊</span><span>Performance Metrics</span></div>
-  <div class="nav" onclick="showPage('settingsPage',this)"><span class="emoji">⚙</span><span>Advanced Settings</span></div>
+  <div class="nav" onclick="showPage('analyticsPage',this)"><span class="emoji">📊</span><span>Metrics</span></div>
+  <div class="nav" onclick="showPage('settingsPage',this)"><span class="emoji">⚙</span><span>Sozlamalar</span></div>
 </aside>
 
 <main class="main">
@@ -566,40 +173,32 @@ button{cursor:pointer;border:none;background:none}
 <section id="dashboard" class="page active">
   <div class="hero">
     <div>
-      <h1>500+ Mustahkam Modulli va<br><span class="gradient">To'liq Avtomatlashtirilgan Supercluster.</span></h1>
-      <p>OmniCode v5.0 Enterprise — birorta ham nuhsoni yo'q, 500 ta qo'shimcha professional quyi tizim va klasterlar bilan ta'minlandi.</p>
+      <h1>Haqiqiy ishlaydigan<br><span class="gradient">Code Studio & AI Yordamchi.</span></h1>
+      <p>Repolaringiz, fayllaringiz va snippetlaringiz doimiy saqlanadi. AI Studio'dagi javoblar haqiqiy sun'iy intellekt modelidan keladi. Docker/SQL/Deploy panellari esa <b>demo rejimida</b> — chunki haqiqiy server infratuzilmasi shart.</p>
       <div class="actions">
-        <button class="btn primary" onclick="newRepo()">＋ New Repository</button>
-        <button class="btn green" onclick="openEditor()">▶ Open Studio Editor</button>
-        <button class="btn" onclick="showPage('aiStudio', document.querySelectorAll('.side .nav')[5])">🤖 Omni AI Studio</button>
-        <button class="btn danger" onclick="triggerAutoBackup()">💾 Instant Backup</button>
+        <button class="btn primary" onclick="newRepo()">＋ Yangi Repository</button>
+        <button class="btn green" onclick="openEditor()">▶ Code Studio'ni ochish</button>
+        <button class="btn" onclick="showPage('aiStudio', document.querySelectorAll('.side .nav')[5])">🤖 AI Studio <span class="badge live">LIVE</span></button>
       </div>
     </div>
-    <div style="font-size:90px;opacity:0.15;font-weight:900">🌌</div>
+    <div style="font-size:80px;opacity:.15;font-weight:900">⚡</div>
   </div>
 
   <div class="stats">
-    <div class="stat"><small>Repositories</small><strong id="repoCount">3</strong></div>
-    <div class="stat"><small>Super Modules</small><strong style="color:var(--cyan)">500 Active</strong></div>
-    <div class="stat"><small>Total Commits</small><strong>12,450</strong></div>
-    <div class="stat"><small>Cluster Uptime</small><strong style="color:var(--green)">100.0%</strong></div>
+    <div class="stat"><small>Repositories</small><strong id="repoCount">0</strong></div>
+    <div class="stat"><small>Fayllar</small><strong id="fileCount">0</strong></div>
+    <div class="stat"><small>Snippetlar</small><strong id="snippetCount">0</strong></div>
+    <div class="stat"><small>AI Studio</small><strong style="color:var(--green)">Live</strong></div>
   </div>
 
   <div class="grid">
     <div class="card">
-      <div class="cardHead">
-        <h2>🔥 Sizin Repozitoriylaringiz</h2>
-        <button class="btn" onclick="newRepo()">+ Yangi</button>
-      </div>
+      <div class="cardHead"><h2>🔥 Repozitoriylaringiz</h2><button class="btn" onclick="newRepo()">+ Yangi</button></div>
       <div id="repoList"></div>
     </div>
-
     <div class="card">
-      <div class="cardHead"><h2>⚡ 500+ Modul Klaster Holati</h2></div>
-      <div class="activity"><b>Autonomous Core Engine</b> — Barcha 500 ta modul mukammal ishlamoqda<small>Status: 200 OK · Error Rate: 0.00%</small></div>
-      <div class="activity"><b>Distributed Database Cluster</b> — PostgreSQL, Redis, MongoDB shkallangan<small>Active Shards: 500</small></div>
-      <div class="activity"><b>AI Neural Grid</b> — Multi-model LLM klasterlari ulangan<small>Latency: 12ms</small></div>
-      <div class="activity"><b>Security Subsystem</b> — Zero-trust shifrlash yoqilgan<small>Protected: 100%</small></div>
+      <div class="cardHead"><h2>◷ So'nggi faoliyat</h2></div>
+      <div id="dashActivity"></div>
     </div>
   </div>
 </section>
@@ -607,87 +206,56 @@ button{cursor:pointer;border:none;background:none}
 <!-- REPOSITORIES -->
 <section id="repositories" class="page">
   <div class="card">
-    <div class="cardHead">
-      <h2>📦 Barcha Repozitoriylar</h2>
-      <button class="btn primary" onclick="newRepo()">＋ New repository</button>
-    </div>
+    <div class="cardHead"><h2>📦 Barcha Repozitoriylar</h2><button class="btn primary" onclick="newRepo()">＋ New repository</button></div>
     <div id="allRepos"></div>
   </div>
 </section>
 
 <!-- EXPLORE -->
 <section id="explore" class="page">
-  <div class="hero">
-    <div>
-      <h1>🌎 Explore <span class="gradient">Supermarket (500+ Hub)</span></h1>
-      <p>500 ta tayyor enterprise shablonlar, sun'iy intellekt agentlari va avtomatlashtirilgan botlar.</p>
-    </div>
-  </div>
+  <div class="hero"><div><h1>🌎 Explore <span class="gradient">Shablonlar</span></h1><p>Bosishingiz bilan repolaringizga haqiqiy fayllar qo'shiladi (fork qilinadi).</p></div></div>
   <br>
-  <div class="toolsGrid">
-    <div class="toolCard">
-      <h3>🐍 Telegram Tap Bot Pro v5</h3>
-      <p>Coin yig'ish, multi-level referral va real-time clicker logikasi.</p>
-      <button class="btn primary" style="margin-top:auto" onclick="toast('Loyiha repozitoriyga fork qilindi! 🎉')">Fork Project</button>
-    </div>
-    <div class="toolCard">
-      <h3>⚡ FastAPI Enterprise RAG Core</h3>
-      <p>Hujjatlarni chunking qilish, vektor baza va to'liq LLM orkestratsiyasi.</p>
-      <button class="btn primary" style="margin-top:auto" onclick="toast('Loyiha fork qilindi! 🎉')">Fork Project</button>
-    </div>
-    <div class="toolCard">
-      <h3>🚀 Free Fire & PUBG Almaz Shop</h3>
-      <p>Payme/Click integratsiyasi va to'liq avtomatik voucher tarqatish.</p>
-      <button class="btn primary" style="margin-top:auto" onclick="toast('Loyiha fork qilindi! 🎉')">Fork Project</button>
-    </div>
-  </div>
+  <div class="toolsGrid" id="exploreGrid"></div>
 </section>
 
 <!-- ACTIVITY -->
 <section id="activity" class="page">
-  <div class="card">
-    <div class="cardHead"><h2>📈 500+ Subsystem Audit Log</h2></div>
-    <div class="activity"><b>Supercluster Sync</b> — Barcha 500 ta modul avtomatik sinxronlandi<small>Real-time · 0 xato</small></div>
-    <div class="activity"><b>Zero-Defect Check</b> — Kод va xotira oqishlari tekshirildi<small>Status: Toza va mukammal</small></div>
-    <div class="activity"><b>Cloud Deployment</b> — manba-bfwm.onrender.com avtomatik yangilandi<small>Render Node-US</small></div>
-  </div>
+  <div class="card"><div class="cardHead"><h2>📈 Audit Log</h2><button class="btn" onclick="clearActivity()">Tozalash</button></div><div id="activityList"></div></div>
 </section>
 
 <!-- EDITOR PAGE -->
 <section id="editorPage" class="page">
   <div class="repoPage">
     <div class="fileTree">
-      <div class="treeHead">📁 omnisphere-ai <span style="font-size:10px;color:var(--green)">● live</span></div>
+      <div class="treeHead">📁 <span id="currentRepoName">loyiha</span> <span class="badge live">saqlanadi</span></div>
+      <div class="newFileRow">
+        <input id="newFileName" placeholder="yangi.js" onkeydown="if(event.key==='Enter')addFile()">
+        <button class="btn" style="padding:8px 10px" onclick="addFile()">+</button>
+      </div>
       <div class="fileList" id="fileListContainer"></div>
     </div>
-
     <div>
       <div class="editorBox">
         <div class="editorHead">
           <span id="fileTitle" style="font-family:monospace;color:var(--blue)">index.html</span>
           <div style="display:flex;gap:8px">
-            <button class="btn" style="padding:5px 10px;font-size:11px" onclick="formatCode()">✨ Format Code</button>
-            <button class="btn" style="padding:5px 10px;font-size:11px" onclick="runCodeSimulation()">▶ Run Preview</button>
-            <button class="btn green" style="padding:5px 12px;font-size:11px" onclick="commitCode()">✓ Commit & Push</button>
+            <button class="btn" style="padding:5px 10px;font-size:11px" onclick="runCodeSimulation()">▶ Live Preview</button>
+            <button class="btn" style="padding:5px 10px;font-size:11px" onclick="downloadCurrentFile()">⬇ Yuklab olish</button>
+            <button class="btn green" style="padding:5px 12px;font-size:11px" onclick="commitCode()">✓ Saqlash</button>
           </div>
         </div>
-        <textarea id="codeEditorArea" class="codeArea" spellcheck="false" oninput="updateCurrentFileCode(this.value)"></textarea>
+        <textarea id="codeEditorArea" class="codeArea" spellcheck="false" oninput="scheduleSave(this.value)"></textarea>
+        <iframe id="previewFrame" class="previewFrame" style="display:none"></iframe>
       </div>
-
       <div class="terminal">
         <div class="termHead">
-          <span>⌘ OmniCode Cloud Terminal (Bash v5.2 + 500 Core)</span>
+          <span>⌘ JS Console <span class="badge live">real JS bajaradi</span></span>
           <button class="btn" style="padding:2px 8px;font-size:10px" onclick="clearTerminal()">Clear</button>
         </div>
-        <div class="termBody" id="terminalOutput">
-          <div>OmniCode Cloud Terminal initialized [500+ Supercluster Subsystems Active]</div>
-          <div>Buyruqlar: "help", "status", "cluster_check", "deploy", "python app.py"</div>
-          <br>
-        </div>
-        <div class="termInputRow">
-          <span>$</span>
-          <input type="text" class="termInput" id="terminalInput" placeholder="Buyruq kiriting..." onkeydown="handleTerminalCommand(event)">
-        </div>
+        <div class="termBody" id="terminalOutput">OmniCode JS konsoli. Haqiqiy JavaScript ifodalarni yozing va Enter bosing.
+Masalan: 2+2  yoki  [1,2,3].map(x=>x*2)
+"help" — buyruqlar ro'yxati</div>
+        <div class="termInputRow"><span>&gt;</span><input type="text" class="termInput" id="terminalInput" placeholder="JS kod yozing..." onkeydown="handleTerminalCommand(event)"></div>
       </div>
     </div>
   </div>
@@ -698,428 +266,570 @@ button{cursor:pointer;border:none;background:none}
   <div class="aiContainer">
     <div class="chatBox">
       <div class="cardHead">
-        <h2>🤖 Omni AI Studio (500-Model Neural Grid)</h2>
-        <span style="font-size:11px;color:var(--green)">● Status: 100% Ishlaydi</span>
+        <h2>🤖 AI Studio <span class="badge live">LIVE — haqiqiy AI</span></h2>
+        <select id="aiModelTier" style="width:auto;padding:6px 10px;font-size:12px">
+          <option value="default">Standart</option>
+          <option value="quick">Tez</option>
+          <option value="complex">Chuqur</option>
+        </select>
       </div>
       <div class="chatMessages" id="chatMessages">
-        <div class="msg ai">Salom! Men OmniCode v5.0 AI markaziman. 500 ta qo'shimcha funksiyalar va sun'iy intellekt klasterlari to'liq ishga tushdi. Savollaringizni bering!</div>
+        <div class="msg ai">Salom! Men haqiqiy AI yordamchiman — kod, arxitektura yoki har qanday savolingizga real javob beraman.</div>
       </div>
       <div class="chatInputArea">
-        <input type="text" id="aiInputText" placeholder="AIga istalgan savolni bering..." onkeydown="if(event.key==='Enter') sendAImessage()">
-        <button class="btn primary" onclick="sendAImessage()">Yuborish 🚀</button>
+        <input type="text" id="aiInputText" placeholder="Savolingizni yozing..." onkeydown="if(event.key==='Enter') sendAImessage()">
+        <button class="btn primary" id="aiSendBtn" onclick="sendAImessage()">Yuborish 🚀</button>
       </div>
     </div>
-
     <div class="card" style="height:fit-content">
-      <div class="cardHead"><h2>⚡ Tezkor AI Klaster Buyruqlari</h2></div>
-      <div class="activity" style="cursor:pointer" onclick="quickAIPrompt('Aiogram 3 toliq bot arxitekturasi va routerlar')">🐍 Aiogram 3 Advanced Core</div>
-      <div class="activity" style="cursor:pointer" onclick="quickAIPrompt('FastAPI enterprise template with WebSocket and DB')">⚡ FastAPI Enterprise</div>
-      <div class="activity" style="cursor:pointer" onclick="quickAIPrompt('Microservices docker-compose configuration')">🐳 Docker Microservices</div>
-      <div class="activity" style="cursor:pointer" onclick="quickAIPrompt('Advanced RAG pipeline implementation code')">🧠 Advanced RAG Engine</div>
+      <div class="cardHead"><h2>⚡ Tezkor so'rovlar</h2></div>
+      <div class="activity" style="cursor:pointer" onclick="quickAIPrompt('Aiogram 3da to\'liq bot arxitekturasi va routerlarni tushuntir')">🐍 Aiogram 3 arxitekturasi</div>
+      <div class="activity" style="cursor:pointer" onclick="quickAIPrompt('FastAPI uchun WebSocket va DB bilan enterprise shablon yoz')">⚡ FastAPI shablon</div>
+      <div class="activity" style="cursor:pointer" onclick="quickAIPrompt('Docker-compose bilan mikroservis konfiguratsiyasi yoz')">🐳 Docker Compose</div>
+      <div class="activity" style="cursor:pointer" onclick="quickAIPrompt('RAG pipeline uchun kod yoz va tushuntir')">🧠 RAG Engine</div>
     </div>
   </div>
 </section>
 
-<!-- DATABASE MANAGER -->
+<!-- DATABASE MANAGER (demo) -->
 <section id="databaseManager" class="page">
   <div class="card">
-    <div class="cardHead">
-      <h2>🗄️ SQL / NoSQL Database Studio (500 Shards)</h2>
-      <button class="btn primary" onclick="toast('Barcha 500 ta baza jadvallari sinxronlandi!')">+ New Table</button>
-    </div>
-    <div class="activity"><b>Cluster Shard 1-250: PostgreSQL 15</b> — Active & Synchronized<small>Rows: 1,420,000 · Latency: 2ms</small></div>
-    <div class="activity"><b>Cluster Shard 251-500: Redis In-Memory Cluster</b> — Active<small>Keys: 85,400 · Hit Rate: 99.9%</small></div>
+    <div class="cardHead"><h2>🗄️ SQL / NoSQL Studio <span class="badge demo">DEMO</span></h2><button class="btn primary" onclick="toast('Demo: jadval yaratildi (real serverga ulanmagan)')">+ New Table</button></div>
+    <div class="notice">Bu panel demo rejimida: haqiqiy PostgreSQL/Redis serveriga ulash uchun backend va connector kerak bo'ladi.</div>
     <div class="chatInputArea" style="margin:16px">
-      <input type="text" placeholder="SQL Query kiriting (masalan: SELECT * FROM supercluster_users)...">
-      <button class="btn primary" onclick="toast('Query bajarildi: 0 xato, 100% aniqlik')">Run Query ⚡</button>
+      <input type="text" id="sqlQueryInput" placeholder="SELECT * FROM users...">
+      <button class="btn primary" onclick="runFakeQuery()">Run Query ⚡</button>
     </div>
+    <div class="terminal" style="margin:16px"><div class="termHead">Natija</div><div class="termBody" id="sqlResult" style="color:var(--cyan)">Query natijasi shu yerda chiqadi (demo).</div></div>
   </div>
 </section>
 
-<!-- API TESTER -->
+<!-- API TESTER (real fetch) -->
 <section id="apiTester" class="page">
   <div class="card">
-    <div class="cardHead">
-      <h2>⚡ REST & WebSocket API Testing Suite</h2>
-    </div>
+    <div class="cardHead"><h2>⚡ REST API Tester <span class="badge live">real so'rov yuboradi</span></h2></div>
+    <div class="notice">Bu yerdan haqiqiy ochiq API'larga (CORS ruxsat bergan) so'rov yuborsa bo'ladi.</div>
     <div class="chatInputArea" style="margin:16px">
-      <select id="apiMethod" style="width:110px;background:var(--panel2);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:10px">
-        <option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option>
-      </select>
-      <input type="text" id="apiUrl" value="https://manba-bfwm.onrender.com/api/v5/supercluster" style="flex:1">
-      <button class="btn primary" onclick="toast('API javobi: 200 OK (500 modules active)')">Send Request</button>
+      <select id="apiMethod" style="width:110px"><option>GET</option><option>POST</option></select>
+      <input type="text" id="apiUrl" value="https://api.github.com/users/github">
+      <button class="btn primary" onclick="sendRealApiRequest()">Yuborish</button>
     </div>
-    <div class="terminal" style="margin:16px">
-      <div class="termHead">Response Preview (JSON)</div>
-      <div class="termBody" style="color:var(--cyan)">{
-  "status": "success",
-  "code": 200,
-  "supercluster_modules": 500,
-  "defects": 0,
-  "server": "Render Cloud Python Worker v5.0",
-  "uptime": "100%"
-}</div>
-    </div>
+    <div class="terminal" style="margin:16px"><div class="termHead">Response</div><div class="termBody" id="apiResult" style="color:var(--cyan)">Javob shu yerda chiqadi.</div></div>
   </div>
 </section>
 
-<!-- SNIPPETS MANAGER -->
+<!-- SNIPPETS -->
 <section id="snippetHub" class="page">
   <div class="card">
-    <div class="cardHead">
-      <h2>📋 Snippets & Code Library (500+ Boilerplates)</h2>
-      <button class="btn primary" onclick="toast('Snippet qo\'shildi!')">+ Add Snippet</button>
-    </div>
-    <div class="repo"><div><div class="repoName">Python Enterprise Bot Core v5</div><div class="repoDesc">Aiogram 3 + SQLAlchemy + Redis FSM</div></div><div class="repoRight"><button class="btn" style="padding:5px 10px;font-size:11px" onclick="toast('Nusxalandi!')">Copy</button></div></div>
-    <div class="repo"><div><div class="repoName">FastAPI High-Load Middleware</div><div class="repoDesc">Security, Rate Limiting & JWT Auth</div></div><div class="repoRight"><button class="btn" style="padding:5px 10px;font-size:11px" onclick="toast('Nusxalandi!')">Copy</button></div></div>
+    <div class="cardHead"><h2>📋 Snippets <span class="badge live">saqlanadi</span></h2><button class="btn primary" onclick="openSnippetForm()">+ Add Snippet</button></div>
+    <div id="snippetListPage"></div>
   </div>
 </section>
 
-<!-- ENVIRONMENT SECRETS -->
+<!-- ENV MANAGER -->
 <section id="envManager" class="page">
   <div class="card">
-    <div class="cardHead">
-      <h2>🔒 Environment Variables & Secrets (Zero-Trust)</h2>
-      <button class="btn primary" onclick="toast('Secret qo\'shildi!')">+ Add Variable</button>
-    </div>
-    <div class="repo"><div><div class="repoName">BOT_TOKEN</div><div class="repoDesc">••••••••••••••••••••••••••••••••</div></div><div class="repoRight"><span style="color:var(--green)">Encrypted</span></div></div>
-    <div class="repo"><div><div class="repoName">DATABASE_URL</div><div class="repoDesc">postgres://secure:cluster@render.internal:5432/v5</div></div><div class="repoRight"><span style="color:var(--green)">Encrypted</span></div></div>
-    <div class="repo"><div><div class="repoName">GEMINI_API_KEY</div><div class="repoDesc">AI_KEY_••••••••••••••••••••••••</div></div><div class="repoRight"><span style="color:var(--green)">Encrypted</span></div></div>
+    <div class="cardHead"><h2>🔒 Environment Variables <span class="badge live">saqlanadi</span></h2><button class="btn primary" onclick="openEnvForm()">+ Add Variable</button></div>
+    <div class="notice">Qiymatlar shu sessiya xotirasida saqlanadi — bu haqiqiy shifrlangan maxfiy joy (secrets vault) emas, shuning uchun parol/tokenlarni bu yerga qo'ymang.</div>
+    <div id="envList"></div>
   </div>
 </section>
 
-<!-- CRON MANAGER -->
+<!-- CRON (demo) -->
 <section id="cronManager" class="page">
   <div class="card">
-    <div class="cardHead">
-      <h2>⏰ Cron Jobs & Background Workers (500 Workers)</h2>
-      <button class="btn primary" onclick="toast('Cron job yaratildi!')">+ New Cron Task</button>
-    </div>
-    <div class="activity"><b>Task: Real-time Supercluster Backup</b> — Schedule: <code>* * * * *</code><small>Status: Active · Workers: 500 running</small></div>
-    <div class="activity"><b>Task: 24/7 Uptime Ping Monitor</b> — Schedule: <code>*/1 * * * *</code><small>Status: Active · Target: manba-bfwm.onrender.com</small></div>
+    <div class="cardHead"><h2>⏰ Cron Jobs <span class="badge demo">DEMO</span></h2><button class="btn primary" onclick="toast('Demo: cron vazifa yaratildi')">+ New Cron Task</button></div>
+    <div class="notice">Haqiqiy fon vazifalari uchun server (masalan Render Cron Job) kerak bo'ladi.</div>
+    <div class="activity"><b>Namuna: Kunlik backup</b> — Schedule: <code>0 3 * * *</code><small>Demo yozuv</small></div>
   </div>
 </section>
 
-<!-- DOCKER CLUSTER -->
+<!-- DOCKER (demo) -->
 <section id="dockerCluster" class="page">
   <div class="card">
-    <div class="cardHead">
-      <h2>🐳 Docker Containers & Orchestration (500 Nodes)</h2>
-      <button class="btn green" onclick="toast('Barcha 500 ta konteyner mukammal ishlamoqda!')">Restart Cluster</button>
-    </div>
-    <div class="repo"><div><div class="repoName">omnicode-supercluster-core</div><div class="repoDesc">Image: python:3.11-alpine — Scaled: 500 instances</div></div><div class="repoRight"><span style="color:var(--green)">● Running (100% Uptime)</span></div></div>
+    <div class="cardHead"><h2>🐳 Docker <span class="badge demo">DEMO</span></h2><button class="btn green" onclick="toast('Demo: konteyner qayta ishga tushirildi')">Restart</button></div>
+    <div class="notice">Brauzerda haqiqiy Docker konteyner ishga tushirib bo'lmaydi — bu ko'rinish namuna sifatida qoldirilgan.</div>
+    <div class="repo"><div><div class="repoName">omnicode-core (namuna)</div><div class="repoDesc">Image: python:3.11-alpine</div></div><div class="repoRight"><span style="color:var(--muted)">Demo</span></div></div>
   </div>
 </section>
 
-<!-- 500+ SUPERCLUSTER CORE SUB-SECTION -->
-<section id="megaSupercluster" class="page">
-  <div class="card">
-    <div class="cardHead">
-      <h2>🌌 500+ Supercluster Autonomous Core Modules</h2>
-      <button class="btn primary" onclick="toast('Barcha 500 ta modul skanerdan o\'tdi: Xato yo\'q!')">Run Full Audit</button>
-    </div>
-    <div class="activity"><b>Modules #1 - #100: Advanced Security & Firewall</b> — Anti-DDoS, WAF, JWT Validator<small>Status: Active (0 defects)</small></div>
-    <div class="activity"><b>Modules #101 - #200: AI Neural Orchestration</b> — Multi-LLM Routing, RAG, Prompt Cache<small>Status: Active (0 defects)</small></div>
-    <div class="activity"><b>Modules #201 - #300: High-Load Database Shards</b> — PostgreSQL, Redis, MongoDB Clusters<small>Status: Active (0 defects)</small></div>
-    <div class="activity"><b>Modules #301 - #400: Cloud DevOps & Render Sync</b> — Auto-Deploy, Rollback, Health Check<small>Status: Active (0 defects)</small></div>
-    <div class="activity"><b>Modules #401 - #500: Telegram Bot Constructors & Mini-Apps</b> — Webhook, FSM, Payments<small>Status: Active (0 defects)</small></div>
-  </div>
-</section>
-
-<!-- DEPLOYMENTS -->
+<!-- DEPLOYMENTS (demo, but real link) -->
 <section id="deployments" class="page">
   <div class="card">
-    <div class="cardHead">
-      <h2>🚀 Cloud Deployments & Render Hosting</h2>
-      <button class="btn primary" onclick="toast('Yangi deployment muvaffaqiyatli ishga tushdi!')">+ Deploy New Project</button>
-    </div>
-    <div class="repo">
-      <div><div class="repoName">manba-bfwm.onrender.com</div><div class="repoDesc">Status: <span style="color:var(--green)">Active (Live 🎉)</span> — 500+ Modules Enabled</div></div>
-      <div class="repoRight"><button class="btn green" style="padding:6px 12px;font-size:12px" onclick="window.open('https://manba-bfwm.onrender.com','_blank')">Saytni ochish</button></div>
-    </div>
+    <div class="cardHead"><h2>🚀 Deployments</h2></div>
+    <div class="notice">Haqiqiy joylashtirilgan sayt havolasi bo'lsa, shu yerga qo'shing — ochish tugmasi real havolaga olib boradi.</div>
+    <div id="deployList"></div>
+    <div class="chatInputArea" style="margin:16px"><input type="text" id="deployUrlInput" placeholder="https://your-app.onrender.com"><button class="btn primary" onclick="addDeployment()">+ Qo'shish</button></div>
   </div>
 </section>
 
-<!-- ANALYTICS PAGE -->
+<!-- ANALYTICS -->
 <section id="analyticsPage" class="page">
   <div class="card">
-    <div class="cardHead"><h2>📊 Performance Metrics & Traffic Analytics</h2></div>
+    <div class="cardHead"><h2>📊 Metrics <span class="badge demo">DEMO</span></h2></div>
+    <div class="notice">Haqiqiy trafik/CPU statistikasi uchun hosting provayderning (Render, Vercel) o'z panelidan foydalaning.</div>
     <div class="stats" style="margin:20px">
-      <div class="stat"><small>CPU Usage</small><strong>8.4%</strong></div>
-      <div class="stat"><small>RAM Usage</small><strong>320 MB / 16 GB</strong></div>
-      <div class="stat"><small>Network I/O</small><strong>14.8 MB/s</strong></div>
-      <div class="stat"><small>HTTP Requests</small><strong>250.4K / day</strong></div>
+      <div class="stat"><small>Repozitoriylar</small><strong id="metricRepos">0</strong></div>
+      <div class="stat"><small>Fayllar</small><strong id="metricFiles">0</strong></div>
+      <div class="stat"><small>AI xabarlar</small><strong id="metricAi">0</strong></div>
+      <div class="stat"><small>Sessiya vaqti</small><strong id="metricTime">0 daq</strong></div>
     </div>
   </div>
 </section>
 
-<!-- SETTINGS PAGE -->
+<!-- SETTINGS -->
 <section id="settingsPage" class="page">
   <div class="card">
-    <div class="cardHead"><h2>⚙ Advanced Platform Settings</h2></div>
-    <div class="activity" style="display:flex;justify-content:space-between;align-items:center">
-      <div><b>Dark / Light Mode Theme</b><small>Sayt dizayn rangini o'zgartirish</small></div>
-      <button class="btn primary" onclick="toggleTheme()">Almashtirish</button>
-    </div>
-    <div class="activity" style="display:flex;justify-content:space-between;align-items:center">
-      <div><b>Local Storage & 500 Cluster Reset</b><small>Barcha ma'lumotlarni tozalash va tiklash</small></div>
-      <button class="btn danger" onclick="localStorage.clear(); location.reload();">Reset All Data</button>
-    </div>
+    <div class="cardHead"><h2>⚙ Sozlamalar</h2></div>
+    <div class="activity" style="display:flex;justify-content:space-between;align-items:center"><div><b>Dark / Light rejim</b><small>Dizayn rangini o'zgartirish</small></div><button class="btn primary" onclick="toggleTheme()">Almashtirish</button></div>
+    <div class="activity" style="display:flex;justify-content:space-between;align-items:center"><div><b>Barcha ma'lumotlarni tozalash</b><small>Repolar, fayllar, snippetlar — qaytarib bo'lmaydi</small></div><button class="btn danger" onclick="resetAllData()">Reset qilish</button></div>
   </div>
 </section>
 
 </main>
 </div>
 
-<!-- NEW REPO MODAL -->
+<!-- MODALS -->
 <div class="modal" id="repoModal">
   <div class="modalBox">
-    <h2>🚀 Yangi Repozitoriy Yaratish</h2>
-    <input id="modalRepoName" placeholder="Repozitoriy nomi (masalan: my-supercluster-app)">
-    <textarea id="modalRepoDesc" placeholder="Loyihangiz haqida tavsif..."></textarea>
-    <select id="modalRepoLang">
-      <option value="Python">Python (Flask / FastAPI / Bot)</option>
-      <option value="JavaScript">JavaScript / Node.js</option>
-      <option value="HTML/CSS">HTML5 / Frontend</option>
-    </select>
-    <div class="modalActions">
-      <button class="btn" onclick="closeModal()">Bekor qilish</button>
-      <button class="btn primary" onclick="confirmCreateRepo()">Create Repository</button>
-    </div>
+    <h2>🚀 Yangi Repozitoriy</h2>
+    <input id="modalRepoName" placeholder="Repozitoriy nomi">
+    <textarea id="modalRepoDesc" placeholder="Tavsif..."></textarea>
+    <select id="modalRepoLang"><option value="Python">Python</option><option value="JavaScript">JavaScript</option><option value="HTML/CSS">HTML/CSS</option></select>
+    <div class="modalActions"><button class="btn" onclick="closeModal('repoModal')">Bekor qilish</button><button class="btn primary" onclick="confirmCreateRepo()">Yaratish</button></div>
   </div>
 </div>
 
-<!-- SNIPPET MODAL -->
 <div class="modal" id="snippetModal">
   <div class="modalBox">
-    <h2>📋 Snippet Kutubxonasi</h2>
-    <p style="color:var(--muted);font-size:13px;margin-bottom:15px">Eng ko'p ishlatiladigan tayyor kodlar to'plami.</p>
-    <div class="repo"><div><div class="repoName">Aiogram 3 Start Handler</div><div class="repoDesc">Python async message handler</div></div></div>
-    <div class="repo"><div><div class="repoName">FastAPI WebSocket Stream</div><div class="repoDesc">Real-time data streaming endpoint</div></div></div>
-    <div class="modalActions"><button class="btn primary" onclick="document.getElementById('snippetModal').classList.remove('show')">Yopish</button></div>
+    <h2>📋 Yangi Snippet</h2>
+    <input id="snipTitle" placeholder="Sarlavha">
+    <input id="snipDesc" placeholder="Qisqa tavsif">
+    <textarea id="snipCode" placeholder="Kod..." style="font-family:monospace;height:140px"></textarea>
+    <div class="modalActions"><button class="btn" onclick="closeModal('snippetModal')">Bekor qilish</button><button class="btn primary" onclick="confirmAddSnippet()">Saqlash</button></div>
   </div>
 </div>
 
-<!-- TOAST -->
+<div class="modal" id="envModal">
+  <div class="modalBox">
+    <h2>🔒 Yangi o'zgaruvchi</h2>
+    <input id="envKey" placeholder="KEY_NOMI">
+    <input id="envVal" placeholder="qiymat">
+    <div class="modalActions"><button class="btn" onclick="closeModal('envModal')">Bekor qilish</button><button class="btn primary" onclick="confirmAddEnv()">Saqlash</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
+/* ---------- STATE (persisted via localStorage; upgraded to real db if available) ---------- */
+let repos, projectFiles, snippets, envVars, deploysList, activityLog;
+let dbApi = null, sampleApi = null, downloadsApi = null;
+let currentActiveFile = "index.html";
+let aiMsgCount = 0;
+const sessionStart = Date.now();
+
 const defaultRepos = [
-  {name:"omnisphere-ai", desc:"AI platform with FastAPI & 500+ Supercluster Tools", stars:64, lang:"Python"},
-  {name:"gift-hub", desc:"Modern Telegram gift platform & store", stars:42, lang:"JavaScript"},
-  {name:"vezto-builder", desc:"Telegram bot constructor system v5.0", stars:28, lang:"Python"}
+  {id:"r1", name:"omnisphere-ai", desc:"AI platform loyihasi", stars:0, lang:"Python"},
 ];
-
-let repos = JSON.parse(localStorage.getItem("omnicode_repos_v5")) || defaultRepos;
-
-let projectFiles = JSON.parse(localStorage.getItem("omnicode_files_v5")) || {
-  "index.html": "<!DOCTYPE html>\n<html lang=\"uz\">\n<head>\n<meta charset=\"UTF-8\">\n<title>OmniCode v5.0 Live</title>\n</head>\n<body style=\"background:#03050a;color:#fff;font-family:sans-serif;text-align:center;padding-top:100px;\">\n  <h1>OmniCode Supercluster v5.0 Live 🚀</h1>\n  <p>500+ modulli avtomatlashtirilgan tizim mukammal ishlamoqda!</p>\n</body>\n</html>",
-  "app.py": "from fastapi import FastAPI\n\napp = FastAPI(title='OmniCode Supercluster v5.0')\n\n@app.get('/')\ndef root():\n    return {'status': 'success', 'modules': 500, 'defects': 0}\n\nif __name__ == '__main__':\n    import uvicorn\n    uvicorn.run(app, host='0.0.0.0', port=5000)",
-  "bot.py": "import asyncio\nfrom aiogram import Bot, Dispatcher, types\n\nbot = Bot(token='YOUR_BOT_TOKEN')\ndp = Dispatcher()\n\n@dp.message(command='start')\nasync def start_cmd(message: types.Message):\n    await message.answer('OmniCode v5.0 Supercluster Bot Online! 🚀')\n\nasync def main():\n    await dp.start_polling(bot)\n\nif __name__ == '__main__':\n    asyncio.run(main())"
+const defaultFiles = {
+  "index.html": "<!DOCTYPE html>\n<html lang=\"uz\">\n<head><meta charset=\"UTF-8\"><title>Mening saytim</title></head>\n<body style=\"font-family:sans-serif;text-align:center;padding-top:80px;\">\n  <h1>Salom, OmniCode! 🚀</h1>\n  <p>Bu Live Preview'da haqiqiy ko'rinadi.</p>\n</body>\n</html>",
+  "app.py": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get('/')\ndef root():\n    return {'status': 'ok'}\n",
 };
 
-let currentActiveFile = "index.html";
+function loadState(){
+  repos = JSON.parse(localStorage.getItem("omnicode_repos_v6")) || defaultRepos;
+  projectFiles = JSON.parse(localStorage.getItem("omnicode_files_v6")) || {...defaultFiles};
+  snippets = JSON.parse(localStorage.getItem("omnicode_snippets_v6")) || [
+    {title:"Aiogram 3 Start Handler", desc:"Python async message handler", code:"@dp.message(Command('start'))\nasync def start(m: types.Message):\n    await m.answer('Salom!')"}
+  ];
+  envVars = JSON.parse(localStorage.getItem("omnicode_env_v6")) || [];
+  deploysList = JSON.parse(localStorage.getItem("omnicode_deploys_v6")) || [
+    {url:"https://manba-2c82.onrender.com", label:"manba-2c82"}
+  ];
+  activityLog = JSON.parse(localStorage.getItem("omnicode_activity_v6")) || [];
+}
+function persist(){
+  localStorage.setItem("omnicode_repos_v6", JSON.stringify(repos));
+  localStorage.setItem("omnicode_files_v6", JSON.stringify(projectFiles));
+  localStorage.setItem("omnicode_snippets_v6", JSON.stringify(snippets));
+  localStorage.setItem("omnicode_env_v6", JSON.stringify(envVars));
+  localStorage.setItem("omnicode_deploys_v6", JSON.stringify(deploysList));
+  localStorage.setItem("omnicode_activity_v6", JSON.stringify(activityLog));
+}
+function logActivity(text){
+  activityLog.unshift({text, time:new Date().toLocaleString()});
+  activityLog = activityLog.slice(0,50);
+  persist();
+  renderActivity();
+}
 
+/* ---------- capabilities init ---------- */
+async function initCapabilities(){
+  try{ if(window.claude && window.claude.use){
+    dbApi = await window.claude.use("db");
+    sampleApi = await window.claude.use("sample");
+    downloadsApi = await window.claude.use("downloads");
+  }}catch(e){ /* not available in this view, fall back to localStorage only */ }
+}
+
+/* ---------- navigation ---------- */
 function showPage(id, el){
   document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
   document.getElementById(id).classList.add("active");
   document.querySelectorAll(".nav").forEach(x => x.classList.remove("active"));
   if(el) el.classList.add("active");
   if(id === "repositories") renderRepos();
-  if(id === "editorPage") renderFileList();
+  if(id === "editorPage") { renderFileList(); selectFile(currentActiveFile); }
+  if(id === "snippetHub") renderSnippetsPage();
+  if(id === "envManager") renderEnvList();
+  if(id === "deployments") renderDeployList();
+  if(id === "activity") renderActivity();
+  if(id === "analyticsPage") renderMetrics();
 }
 
-function newRepo(){
-  document.getElementById("repoModal").classList.add("show");
-  document.getElementById("modalRepoName").focus();
-}
-
-function closeModal(){
-  document.getElementById("repoModal").classList.remove("show");
-}
-
+/* ---------- repos ---------- */
+function newRepo(){ document.getElementById("repoModal").classList.add("show"); document.getElementById("modalRepoName").focus(); }
+function closeModal(id){ document.getElementById(id).classList.remove("show"); }
 function confirmCreateRepo(){
   const name = document.getElementById("modalRepoName").value.trim();
   const desc = document.getElementById("modalRepoDesc").value.trim();
   const lang = document.getElementById("modalRepoLang").value;
-
   if(!name){ toast("Nomni kiriting!"); return; }
-
-  repos.unshift({name, desc, stars: 0, lang});
-  localStorage.setItem("omnicode_repos_v5", JSON.stringify(repos));
-  
-  renderRepos();
-  document.getElementById("repoCount").textContent = repos.length;
-  closeModal();
+  repos.unshift({id:"r"+Date.now(), name, desc, stars:0, lang});
+  persist();
+  renderRepos(); renderDashboard();
+  closeModal("repoModal");
   document.getElementById("modalRepoName").value = "";
   document.getElementById("modalRepoDesc").value = "";
-  toast("✓ Yangi repozitoriy va 500 ta modul bazasiga qo'shildi!");
+  logActivity(`Yangi repository yaratildi: ${name}`);
+  toast("✓ Repository yaratildi va saqlandi");
 }
-
+function escapeHtml(t){ return String(t).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
 function renderRepos(){
   const box = document.getElementById("allRepos");
   const list = document.getElementById("repoList");
-  const html = repos.map(r => `
+  const html = repos.length ? repos.map(r => `
     <div class="repo">
-      <div>
-        <div class="repoName" onclick="openEditor()">${escapeHtml(r.name)}</div>
-        <div class="repoDesc">${escapeHtml(r.desc)}</div>
-      </div>
-      <div class="repoRight">
-        <span style="font-size:11px;color:var(--muted)">${r.lang || 'Code'}</span>
-        ⭐ ${r.stars}
-      </div>
-    </div>
-  `).join("");
+      <div><div class="repoName" onclick="openEditor()">${escapeHtml(r.name)}</div><div class="repoDesc">${escapeHtml(r.desc||"")}</div></div>
+      <div class="repoRight"><span style="font-size:11px;color:var(--muted)">${escapeHtml(r.lang||'Code')}</span> ⭐ ${r.stars}</div>
+    </div>`).join("") : `<div class="empty">Hali repozitoriy yo'q. "+ Yangi" tugmasini bosing.</div>`;
   if(box) box.innerHTML = html;
   if(list) list.innerHTML = html;
+  document.getElementById("repoCount").textContent = repos.length;
+}
+function renderDashboard(){
+  renderRepos();
+  document.getElementById("fileCount").textContent = Object.keys(projectFiles).length;
+  document.getElementById("snippetCount").textContent = snippets.length;
+  const dash = document.getElementById("dashActivity");
+  dash.innerHTML = activityLog.slice(0,5).map(a => `<div class="activity">${escapeHtml(a.text)}<small>${a.time}</small></div>`).join("") || `<div class="empty">Hali faoliyat yo'q</div>`;
 }
 
-function escapeHtml(text){
-  return text.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+/* ---------- explore ---------- */
+const exploreTemplates = [
+  {icon:"🐍", name:"Telegram Bot boshlang'ich shablon", desc:"Aiogram 3 asosida start/help handlerlar bilan.", file:"bot.py", code:"import asyncio\nfrom aiogram import Bot, Dispatcher, types\nfrom aiogram.filters import Command\n\nbot = Bot(token='YOUR_BOT_TOKEN')\ndp = Dispatcher()\n\n@dp.message(Command('start'))\nasync def start_cmd(message: types.Message):\n    await message.answer('Salom! Bot ishga tushdi 🚀')\n\nasync def main():\n    await dp.start_polling(bot)\n\nif __name__ == '__main__':\n    asyncio.run(main())"},
+  {icon:"⚡", name:"FastAPI boshlang'ich shablon", desc:"Oddiy FastAPI serveri, / endpoint bilan.", file:"main.py", code:"from fastapi import FastAPI\n\napp = FastAPI(title='Mening APIm')\n\n@app.get('/')\ndef root():\n    return {'status': 'success'}\n\nif __name__ == '__main__':\n    import uvicorn\n    uvicorn.run(app, host='0.0.0.0', port=8000)"},
+  {icon:"🌐", name:"Landing page shablon", desc:"Oddiy HTML landing sahifasi.", file:"landing.html", code:"<!DOCTYPE html>\n<html><head><title>Landing</title></head>\n<body style=\"font-family:sans-serif;text-align:center;padding-top:80px\">\n<h1>Mahsulotingiz nomi</h1>\n<p>Qisqa tavsif shu yerda.</p>\n</body></html>"}
+];
+function renderExplore(){
+  document.getElementById("exploreGrid").innerHTML = exploreTemplates.map((t,i) => `
+    <div class="toolCard"><h3>${t.icon} ${escapeHtml(t.name)}</h3><p>${escapeHtml(t.desc)}</p>
+    <button class="btn primary" style="margin-top:auto" onclick="forkTemplate(${i})">Fork qilish</button></div>`).join("");
+}
+function forkTemplate(i){
+  const t = exploreTemplates[i];
+  projectFiles[t.file] = t.code;
+  persist();
+  logActivity(`Shablon fork qilindi: ${t.name} (${t.file})`);
+  toast(`✓ ${t.file} loyihangizga qo'shildi!`);
 }
 
-function openEditor(){
-  showPage("editorPage", document.querySelectorAll('.side .nav')[5]);
+/* ---------- activity ---------- */
+function renderActivity(){
+  document.getElementById("activityList").innerHTML = activityLog.length ? activityLog.map(a => `<div class="activity">${escapeHtml(a.text)}<small>${a.time}</small></div>`).join("") : `<div class="empty">Hali faoliyat qayd etilmagan</div>`;
+}
+function clearActivity(){ activityLog=[]; persist(); renderActivity(); toast("Log tozalandi"); }
+
+/* ---------- editor ---------- */
+function openEditor(){ showPage("editorPage", document.querySelectorAll('.side .nav')[5]); }
+function renderFileList(){
+  document.getElementById("fileListContainer").innerHTML = Object.keys(projectFiles).map(f => `
+    <div class="fileItem ${f===currentActiveFile?'selected':''}">
+      <span onclick="selectFile('${f}')" style="flex:1">📄 ${escapeHtml(f)}</span>
+      <span class="del" onclick="deleteFile('${f}')">✕</span>
+    </div>`).join("");
+}
+function addFile(){
+  const input = document.getElementById("newFileName");
+  const name = input.value.trim();
+  if(!name){ toast("Fayl nomini kiriting"); return; }
+  if(projectFiles[name]){ toast("Bu nomli fayl allaqachon bor"); return; }
+  projectFiles[name] = "";
+  persist();
+  input.value = "";
+  renderFileList();
+  selectFile(name);
+  logActivity(`Yangi fayl yaratildi: ${name}`);
+}
+function deleteFile(name){
+  if(Object.keys(projectFiles).length<=1){ toast("Kamida bitta fayl qolishi kerak"); return; }
+  delete projectFiles[name];
+  if(currentActiveFile===name) currentActiveFile = Object.keys(projectFiles)[0];
+  persist();
   renderFileList();
   selectFile(currentActiveFile);
+  logActivity(`Fayl o'chirildi: ${name}`);
 }
-
-function renderFileList(){
-  const container = document.getElementById("fileListContainer");
-  container.innerHTML = Object.keys(projectFiles).map(file => `
-    <div class="fileItem ${file === currentActiveFile ? 'selected' : ''}" onclick="selectFile('${file}')">
-      📄 ${file}
-    </div>
-  `).join("");
-}
-
 function selectFile(filename){
   currentActiveFile = filename;
   renderFileList();
   document.getElementById("fileTitle").textContent = filename;
   document.getElementById("codeEditorArea").value = projectFiles[filename] || "";
+  document.getElementById("previewFrame").style.display = "none";
+  document.getElementById("codeEditorArea").style.display = "block";
 }
-
-function updateCurrentFileCode(val){
+let saveTimer=null;
+function scheduleSave(val){
   projectFiles[currentActiveFile] = val;
-  localStorage.setItem("omnicode_files_v5", JSON.stringify(projectFiles));
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>persist(), 400);
 }
-
-function formatCode(){
-  toast("✨ Kod Prettier uslubida mukammal formatlandi!");
-}
-
-function runCodeSimulation(){
-  toast("▶ Live Run Preview: Kod muvaffaqiyatli ishga tushdi (0 xato)!");
-}
-
 function commitCode(){
-  localStorage.setItem("omnicode_files_v5", JSON.stringify(projectFiles));
-  toast("✓ Commit & Push muvaffaqiyatli bajarildi! Render serveri yangilandi 🚀");
+  persist();
+  logActivity(`Saqlandi: ${currentActiveFile}`);
+  toast("✓ Fayl saqlandi (haqiqiy, brauzeringizda saqlanadi)");
 }
-
-function handleTerminalCommand(e){
-  if(e.key === "Enter"){
-    const input = document.getElementById("terminalInput");
-    const cmd = input.value.trim();
-    if(!cmd) return;
-
-    appendTerminalLog("$ " + cmd);
-    input.value = "";
-
-    setTimeout(() => {
-      let output = "";
-      if(cmd === "help"){
-        output = "Mavjud buyruqlar: help, status, cluster_check, python app.py, npm start, deploy, clear";
-      } else if(cmd === "status"){
-        output = "System Status: 100% Online · 500+ Modules Active · Zero Defects";
-      } else if(cmd === "cluster_check"){
-        output = "Supercluster Audit: 500/500 modules verified. All databases, AI clusters & workers are running smoothly.";
-      } else if(cmd === "python app.py" || cmd === "python3 app.py"){
-        output = "INFO:     Uvicorn running on http://0.0.0.0:5000 (Press CTRL+C to quit)\nINFO:     Application startup complete. 500 modules loaded.";
-      } else if(cmd === "deploy"){
-        output = "Deploying to Render (manba-bfwm.onrender.com)...\nBuild successful! Zero errors found.";
-      } else {
-        output = `Buyruq bajarildi: '${cmd}'. Natija: Muvaffaqiyatli (0 xato).`;
-      }
-      appendTerminalLog(output);
-    }, 150);
+function downloadCurrentFile(){
+  const content = projectFiles[currentActiveFile] || "";
+  const blob = new Blob([content], {type:"text/plain"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = currentActiveFile;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  toast("⬇ Fayl kompyuteringizga yuklab olindi");
+}
+function runCodeSimulation(){
+  const frame = document.getElementById("previewFrame");
+  const area = document.getElementById("codeEditorArea");
+  if(currentActiveFile.endsWith(".html")){
+    frame.style.display = "block";
+    area.style.display = "none";
+    frame.srcdoc = projectFiles[currentActiveFile];
+    toast("▶ Live Preview: HTML haqiqiy render qilindi");
+  } else {
+    toast("Live Preview faqat .html fayllar uchun ishlaydi. Boshqa tillar uchun JS Console'dan foydalaning.");
   }
 }
 
+/* ---------- terminal (real JS eval) ---------- */
 function appendTerminalLog(text){
-  const termBody = document.getElementById("terminalOutput");
-  const div = document.createElement("div");
-  div.textContent = text;
-  termBody.appendChild(div);
-  termBody.scrollTop = termBody.scrollHeight;
+  const el = document.getElementById("terminalOutput");
+  el.textContent += "\n" + text;
+  el.scrollTop = el.scrollHeight;
 }
-
-function clearTerminal(){
-  document.getElementById("terminalOutput").innerHTML = "";
+function handleTerminalCommand(e){
+  if(e.key !== "Enter") return;
+  const input = document.getElementById("terminalInput");
+  const cmd = input.value.trim();
+  if(!cmd) return;
+  appendTerminalLog("> " + cmd);
+  input.value = "";
+  if(cmd === "help"){ appendTerminalLog("Bu haqiqiy JS konsol. Har qanday JS ifodasini yozing, masalan: Math.sqrt(81)\n'clear' — tozalash"); return; }
+  if(cmd === "clear"){ clearTerminal(); return; }
+  try{
+    const result = Function('"use strict"; return (' + cmd + ')')();
+    appendTerminalLog("← " + (typeof result === 'object' ? JSON.stringify(result) : String(result)));
+  }catch(err){
+    appendTerminalLog("Xato: " + err.message);
+  }
 }
+function clearTerminal(){ document.getElementById("terminalOutput").textContent = "OmniCode JS konsoli tozalandi."; }
 
-function sendAImessage(){
+/* ---------- AI Studio (real via sample capability) ---------- */
+async function sendAImessage(){
   const input = document.getElementById("aiInputText");
   const prompt = input.value.trim();
   if(!prompt) return;
-
   const chat = document.getElementById("chatMessages");
   chat.innerHTML += `<div class="msg user">${escapeHtml(prompt)}</div>`;
   input.value = "";
   chat.scrollTop = chat.scrollHeight;
+  aiMsgCount++;
 
-  setTimeout(() => {
-    let reply = `Omni AI Studio javobi: '${prompt}' talabingiz 500 ta supercluster modul yordamida tahlil qilindi. Kod va arxitektura mukammal va xatosiz tayyorlandi! 🚀`;
-    chat.innerHTML += `<div class="msg ai">${escapeHtml(reply)}</div>`;
-    chat.scrollTop = chat.scrollHeight;
-  }, 300);
+  const loadingDiv = document.createElement("div");
+  loadingDiv.className = "msg ai loading";
+  loadingDiv.textContent = "Yozmoqda...";
+  chat.appendChild(loadingDiv);
+  chat.scrollTop = chat.scrollHeight;
+
+  const btn = document.getElementById("aiSendBtn");
+  btn.disabled = true;
+
+  if(!sampleApi){
+    loadingDiv.classList.remove("loading");
+    loadingDiv.textContent = "AI Studio hozir ulanmagan (bu ko'rinishda 'sample' imkoniyati yo'q). Iltimos, artifaktni claude.ai'da to'liq ochib ko'ring.";
+    btn.disabled = false;
+    return;
+  }
+  try{
+    const tier = document.getElementById("aiModelTier").value;
+    const res = await sampleApi(prompt, {
+      modelTier: tier,
+      onText: ({text}) => { loadingDiv.classList.remove("loading"); loadingDiv.textContent = text; chat.scrollTop = chat.scrollHeight; }
+    });
+    loadingDiv.classList.remove("loading");
+    loadingDiv.textContent = res.text;
+  }catch(err){
+    loadingDiv.classList.remove("loading");
+    loadingDiv.textContent = "Xato yuz berdi: " + (err.message || "AI javob bera olmadi");
+  }
+  btn.disabled = false;
+  chat.scrollTop = chat.scrollHeight;
+}
+function quickAIPrompt(text){ document.getElementById("aiInputText").value = text; sendAImessage(); }
+
+/* ---------- SQL demo ---------- */
+function runFakeQuery(){
+  const q = document.getElementById("sqlQueryInput").value.trim();
+  document.getElementById("sqlResult").textContent = q ? `-- Demo natija --\n[]  (haqiqiy bazaga ulanmagan)` : "Avval so'rov kiriting";
 }
 
-function quickAIPrompt(text){
-  document.getElementById("aiInputText").value = text;
-  sendAImessage();
+/* ---------- API tester (real fetch) ---------- */
+async function sendRealApiRequest(){
+  const method = document.getElementById("apiMethod").value;
+  const url = document.getElementById("apiUrl").value.trim();
+  const resultEl = document.getElementById("apiResult");
+  if(!url){ resultEl.textContent = "URL kiriting"; return; }
+  resultEl.textContent = "So'rov yuborilmoqda...";
+  try{
+    const res = await fetch(url, {method});
+    const text = await res.text();
+    let pretty = text;
+    try{ pretty = JSON.stringify(JSON.parse(text), null, 2); }catch(e){}
+    resultEl.textContent = `Status: ${res.status}\n\n` + pretty.slice(0,2000);
+  }catch(err){
+    resultEl.textContent = "Xato (ehtimol CORS bloklagan): " + err.message;
+  }
 }
 
-function toggleAIModal(){
-  showPage('aiStudio', document.querySelectorAll('.side .nav')[5]);
+/* ---------- snippets ---------- */
+function openSnippets(){ showPage('snippetHub', document.querySelectorAll('.side .nav')[9]); }
+function openSnippetForm(){ document.getElementById("snippetModal").classList.add("show"); }
+function confirmAddSnippet(){
+  const title = document.getElementById("snipTitle").value.trim();
+  const desc = document.getElementById("snipDesc").value.trim();
+  const code = document.getElementById("snipCode").value;
+  if(!title){ toast("Sarlavha kiriting"); return; }
+  snippets.unshift({title, desc, code});
+  persist();
+  closeModal("snippetModal");
+  document.getElementById("snipTitle").value=""; document.getElementById("snipDesc").value=""; document.getElementById("snipCode").value="";
+  renderSnippetsPage();
+  logActivity(`Snippet qo'shildi: ${title}`);
+  toast("✓ Snippet saqlandi");
+}
+function renderSnippetsPage(){
+  document.getElementById("snippetListPage").innerHTML = snippets.length ? snippets.map((s,i) => `
+    <div class="repo"><div><div class="repoName">${escapeHtml(s.title)}</div><div class="repoDesc">${escapeHtml(s.desc||"")}</div></div>
+    <div class="repoRight"><button class="btn" style="padding:5px 10px;font-size:11px" onclick="copySnippet(${i})">Copy</button><button class="btn danger" style="padding:5px 10px;font-size:11px" onclick="deleteSnippet(${i})">O'chirish</button></div></div>`).join("") : `<div class="empty">Hali snippet yo'q</div>`;
+}
+function copySnippet(i){
+  navigator.clipboard.writeText(snippets[i].code).then(()=>toast("✓ Nusxalandi!")).catch(()=>toast("Nusxalashda xato"));
+}
+function deleteSnippet(i){ snippets.splice(i,1); persist(); renderSnippetsPage(); }
+
+/* ---------- env vars ---------- */
+function openEnvForm(){ document.getElementById("envModal").classList.add("show"); }
+function confirmAddEnv(){
+  const key = document.getElementById("envKey").value.trim();
+  const val = document.getElementById("envVal").value;
+  if(!key){ toast("KEY kiriting"); return; }
+  envVars.unshift({key, val});
+  persist();
+  closeModal("envModal");
+  document.getElementById("envKey").value=""; document.getElementById("envVal").value="";
+  renderEnvList();
+  toast("✓ Saqlandi");
+}
+function renderEnvList(){
+  document.getElementById("envList").innerHTML = envVars.length ? envVars.map((e,i) => `
+    <div class="repo"><div><div class="repoName">${escapeHtml(e.key)}</div><div class="repoDesc">${'•'.repeat(Math.min(e.val.length,20))}</div></div>
+    <div class="repoRight"><button class="btn" style="padding:5px 10px;font-size:11px" onclick="deleteEnv(${i})">O'chirish</button></div></div>`).join("") : `<div class="empty">Hali o'zgaruvchi yo'q</div>`;
+}
+function deleteEnv(i){ envVars.splice(i,1); persist(); renderEnvList(); }
+
+/* ---------- deployments (real links) ---------- */
+function addDeployment(){
+  const input = document.getElementById("deployUrlInput");
+  const url = input.value.trim();
+  if(!url){ toast("URL kiriting"); return; }
+  deploysList.unshift({url, label:url.replace(/^https?:\/\//,'').split('.')[0]});
+  persist();
+  input.value = "";
+  renderDeployList();
+  logActivity(`Deployment qo'shildi: ${url}`);
+}
+function renderDeployList(){
+  document.getElementById("deployList").innerHTML = deploysList.length ? deploysList.map((d,i) => `
+    <div class="repo"><div><div class="repoName">${escapeHtml(d.label)}</div><div class="repoDesc">${escapeHtml(d.url)}</div></div>
+    <div class="repoRight"><button class="btn green" style="padding:6px 12px;font-size:12px" onclick="window.open('${escapeHtml(d.url)}','_blank')">Ochish</button><button class="btn danger" style="padding:6px 10px;font-size:11px" onclick="deleteDeploy(${i})">✕</button></div></div>`).join("") : `<div class="empty">Hali deployment qo'shilmagan</div>`;
+}
+function deleteDeploy(i){ deploysList.splice(i,1); persist(); renderDeployList(); }
+
+/* ---------- metrics ---------- */
+function renderMetrics(){
+  document.getElementById("metricRepos").textContent = repos.length;
+  document.getElementById("metricFiles").textContent = Object.keys(projectFiles).length;
+  document.getElementById("metricAi").textContent = aiMsgCount;
+  document.getElementById("metricTime").textContent = Math.max(1, Math.round((Date.now()-sessionStart)/60000)) + " daq";
 }
 
-function openSnippets(){
-  showPage('snippetHub', document.querySelectorAll('.side .nav')[8]);
+/* ---------- misc ---------- */
+function doGlobalSearch(q){
+  if(!q){ return; }
+  const hit = repos.find(r => r.name.toLowerCase().includes(q.toLowerCase()));
+  if(hit){ showPage('repositories', document.querySelectorAll('.side .nav')[1]); }
 }
-
-function triggerAutoBackup(){
-  toast("💾 Instant Backup: Barcha 500 ta modul va bazalar shifrlangan holatda saqlandi!");
-}
-
 function toggleTheme(){
   const html = document.documentElement;
-  const current = html.getAttribute("data-theme");
-  const next = current === "dark" ? "light" : "dark";
+  const next = html.getAttribute("data-theme")==="dark" ? "light" : "dark";
   html.setAttribute("data-theme", next);
-  toast("Mavzu o'zgartirildi: " + next);
+  toast("Mavzu: " + next);
 }
-
 function toast(message){
   const t = document.getElementById("toast");
   t.textContent = message;
   t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 2600);
+  clearTimeout(t._h);
+  t._h = setTimeout(()=>t.classList.remove("show"), 2600);
+}
+function resetAllData(){
+  if(!confirm("Rostdan ham barcha ma'lumotlarni o'chirmoqchimisiz? Bu qaytarib bo'lmaydi.")) return;
+  localStorage.removeItem("omnicode_repos_v6");
+  localStorage.removeItem("omnicode_files_v6");
+  localStorage.removeItem("omnicode_snippets_v6");
+  localStorage.removeItem("omnicode_env_v6");
+  localStorage.removeItem("omnicode_deploys_v6");
+  localStorage.removeItem("omnicode_activity_v6");
+  location.reload();
 }
 
 document.addEventListener("keydown", e => {
-  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'){
-    e.preventDefault();
-    document.getElementById("globalSearch").focus();
-  }
-  if(e.key === "Escape") closeModal();
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); document.getElementById("globalSearch").focus(); }
+  if(e.key === "Escape") document.querySelectorAll(".modal.show").forEach(m=>m.classList.remove("show"));
 });
 
-document.getElementById("repoCount").textContent = repos.length;
-renderRepos();
-renderFileList();
+/* ---------- boot ---------- */
+(async function init(){
+  loadState();
+  await initCapabilities();
+  renderDashboard();
+  renderExplore();
+  renderFileList();
+  selectFile(currentActiveFile);
+})();
 </script>
 </body>
 </html>
